@@ -1,0 +1,59 @@
+{
+  "home": {
+    "purchaseStars": "Purchase Stars",
+    "subtitle": "Add premium currency to your account",
+
+    "telegramUsername": "Telegram username",
+    "myUsername": "MY",
+
+    "starsAmount": "Stars amount",
+    "starsLimit": "Min: 50 | Max: 10,000",
+
+    "stars": "STARS",
+
+    "paymentAmount": "Payment amount",
+    "cashback": "Cashback",
+
+    "buy": "Buy now",
+
+    "premiumSupport": "Premium Support",
+    "premiumSupportDesc": "Our premium support is available 24/7 for secure transactions.",
+
+    "secureFooter": "Secure payment powered by Telegram Stars Engine"
+  },
+  "payment": {
+    "title": "Payment Details",
+
+    "virtualCard": "Virtual Card",
+    "cardDetails": "Card Details",
+
+    "cardNumber": "Card Number",
+    "cardOwner": "Card Holder",
+
+    "paymentWarning": "You must send the exact payment amount shown, otherwise verification may fail. Please be careful!",
+
+    "cashback": "Cashback",
+    "statusActive": "Active",
+
+    "verifyPayment": "Verify Payment",
+    "cancel": "Cancel"
+  },
+  "confirm": {
+    "title": "Do you want to cancel the payment?",
+    "continue": "No, continue",
+    "cancel": "Yes, cancel"
+  },
+  "success": {
+    "title": "Payment Successful!",
+    "subtitle": "Stars have been added to your balance",
+    "cashbackLabel": "CASHBACK",
+    "again": "Buy more Stars"
+  },
+  "error": {
+    "title": "Payment Failed",
+    "description": "An error occurred, please try again",
+    "networkError": "Internet connection lost",
+    "retry": "Retry",
+    "cancel": "Cancel"
+  }
+}

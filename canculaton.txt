@@ -1,0 +1,440 @@
+import React, { useState } from "react";
+import { Calculator, TrendingUp, Users, Gift } from "lucide-react";
+
+export default function ProfitCalculator() {
+  const [initialInvestment] = useState(204000);
+  const [tonPrice] = useState(10.06);
+  const [walletCommission] = useState(0.01);
+  const [tonAfterCommission] = useState(9.9);
+
+  const [stars50Price] = useState(0.48);
+  const [stars100Price] = useState(0.95);
+  const [uzbToTon] = useState(204000 / 10.06);
+
+  const [dailyCustomers, setDailyCustomers] = useState(20);
+  const [stars50Percent, setStars50Percent] = useState(40);
+  const [cashbackRate, setCashbackRate] = useState(5);
+
+  // Asosiy hisoblashlar
+  const tonBought = initialInvestment / uzbToTon;
+  const tonAfterWallet = tonBought * (1 - walletCommission);
+
+  // Har bir paketdan foyda (TON da)
+  const stars50PerTon = 50 / stars50Price;
+  const stars100PerTon = 100 / stars100Price;
+
+  // Bozor narxi (UZB so'mda)
+  const market50Price = 11000;
+  const market100Price = 22000;
+
+  // Bizning narxlarimiz (TON dan UZB so'mga)
+  const our50Price = stars50Price * uzbToTon;
+  const our100Price = stars100Price * uzbToTon;
+
+  // Chegirma foizi
+  const discount50 = (
+    ((market50Price - our50Price) / market50Price) *
+    100
+  ).toFixed(1);
+  const discount100 = (
+    ((market100Price - our100Price) / market100Price) *
+    100
+  ).toFixed(1);
+
+  // Kunlik savdo
+  const daily50Sales = Math.round(dailyCustomers * (stars50Percent / 100));
+  const daily100Sales = dailyCustomers - daily50Sales;
+
+  // Kunlik stars soni
+  const dailyStars50 = daily50Sales * 50;
+  const dailyStars100 = daily100Sales * 100;
+  const totalDailyStars = dailyStars50 + dailyStars100;
+
+  // TON sarfi kuniga
+  const tonSpent50 = daily50Sales * stars50Price;
+  const tonSpent100 = daily100Sales * stars100Price;
+  const totalTonSpent = tonSpent50 + tonSpent100;
+
+  // Necha kun davom etadi
+  const daysCanOperate = tonAfterWallet / totalTonSpent;
+
+  // Daromad (UZB so'mda)
+  const revenue50 = daily50Sales * our50Price;
+  const revenue100 = daily100Sales * our100Price;
+  const totalDailyRevenue = revenue50 + revenue100;
+
+  // Xarajat (TON dan so'mga)
+  const cost50 = daily50Sales * stars50Price * uzbToTon;
+  const cost100 = daily100Sales * stars100Price * uzbToTon;
+  const totalDailyCost = cost50 + cost100;
+
+  // Cashback xarajati (stars da)
+  const cashbackStars50 = dailyStars50 * (cashbackRate / 100);
+  const cashbackStars100 = dailyStars100 * (cashbackRate / 100);
+  const totalCashbackStars = cashbackStars50 + cashbackStars100;
+  const cashbackCostTon = (totalCashbackStars / 100) * stars100Price;
+  const cashbackCostUzb = cashbackCostTon * uzbToTon;
+
+  // Sof foyda
+  const dailyProfit = totalDailyRevenue - totalDailyCost - cashbackCostUzb;
+  const monthlyProfit = dailyProfit * 30;
+
+  // ROI (investitsiyaning qaytishi)
+  const daysToRecoup = initialInvestment / dailyProfit;
+
+  // Profit margin
+  const profitMargin = ((dailyProfit / totalDailyRevenue) * 100).toFixed(1);
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="bg-white rounded-2xl shadow-xl p-6 mb-6">
+          <div className="flex items-center gap-3 mb-6">
+            <Calculator className="w-8 h-8 text-blue-600" />
+            <h1 className="text-3xl font-bold text-gray-800">
+              Telegram Stars Foyda Kalkulyatori
+            </h1>
+          </div>
+
+          {/* Dastlabki Ma'lumotlar */}
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
+            <div className="bg-blue-50 rounded-xl p-6">
+              <h2 className="text-xl font-semibold text-blue-900 mb-4">
+                💰 Dastlabki Investitsiya
+              </h2>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-gray-700">TON narxi:</span>
+                  <span className="font-semibold">
+                    {tonPrice.toFixed(2)} TON
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-700">Pul miqdori:</span>
+                  <span className="font-semibold">
+                    {initialInvestment.toLocaleString()} so'm
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-700">Sotib olingan TON:</span>
+                  <span className="font-semibold text-blue-600">
+                    {tonBought.toFixed(2)} TON
+                  </span>
+                </div>
+                <div className="flex justify-between border-t pt-2">
+                  <span className="text-gray-700">
+                    Hamyon komissiyasi (1%):
+                  </span>
+                  <span className="text-red-600">
+                    -{(tonBought - tonAfterWallet).toFixed(2)} TON
+                  </span>
+                </div>
+                <div className="flex justify-between bg-blue-100 rounded p-2">
+                  <span className="font-semibold">Qolgan TON:</span>
+                  <span className="font-bold text-blue-700">
+                    {tonAfterWallet.toFixed(2)} TON
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="bg-green-50 rounded-xl p-6">
+              <h2 className="text-xl font-semibold text-green-900 mb-4">
+                📊 Narxlar Taqqoslash
+              </h2>
+              <div className="space-y-4">
+                <div className="bg-white rounded-lg p-4">
+                  <div className="font-semibold text-gray-800 mb-2">
+                    50 Stars:
+                  </div>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span>Bozor narxi:</span>
+                    <span className="text-red-600 line-through">
+                      {market50Price.toLocaleString()} so'm
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span>Sizning narxingiz:</span>
+                    <span className="text-green-600 font-semibold">
+                      {Math.round(our50Price).toLocaleString()} so'm
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Chegirma:</span>
+                    <span className="text-blue-600 font-bold">
+                      {discount50}%
+                    </span>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg p-4">
+                  <div className="font-semibold text-gray-800 mb-2">
+                    100 Stars:
+                  </div>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span>Bozor narxi:</span>
+                    <span className="text-red-600 line-through">
+                      {market100Price.toLocaleString()} so'm
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span>Sizning narxingiz:</span>
+                    <span className="text-green-600 font-semibold">
+                      {Math.round(our100Price).toLocaleString()} so'm
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Chegirma:</span>
+                    <span className="text-blue-600 font-bold">
+                      {discount100}%
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Sozlamalar */}
+          <div className="bg-purple-50 rounded-xl p-6 mb-8">
+            <h2 className="text-xl font-semibold text-purple-900 mb-4">
+              ⚙️ Biznes Sozlamalari
+            </h2>
+            <div className="grid md:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Kunlik mijozlar soni:
+                </label>
+                <input
+                  type="range"
+                  min="5"
+                  max="100"
+                  value={dailyCustomers}
+                  onChange={(e) => setDailyCustomers(Number(e.target.value))}
+                  className="w-full"
+                />
+                <div className="text-center text-2xl font-bold text-purple-600 mt-2">
+                  {dailyCustomers}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  50 Stars xaridorlar (%):
+                </label>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={stars50Percent}
+                  onChange={(e) => setStars50Percent(Number(e.target.value))}
+                  className="w-full"
+                />
+                <div className="text-center text-2xl font-bold text-purple-600 mt-2">
+                  {stars50Percent}%
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Cashback foizi (%):
+                </label>
+                <input
+                  type="range"
+                  min="0"
+                  max="10"
+                  step="0.5"
+                  value={cashbackRate}
+                  onChange={(e) => setCashbackRate(Number(e.target.value))}
+                  className="w-full"
+                />
+                <div className="text-center text-2xl font-bold text-purple-600 mt-2">
+                  {cashbackRate}%
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Kunlik Statistika */}
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-orange-50 rounded-xl p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Users className="w-6 h-6 text-orange-600" />
+                <h3 className="text-lg font-semibold text-orange-900">
+                  Kunlik Savdo
+                </h3>
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span>50 Stars:</span>
+                  <span className="font-semibold">{daily50Sales} ta</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>100 Stars:</span>
+                  <span className="font-semibold">{daily100Sales} ta</span>
+                </div>
+                <div className="flex justify-between text-sm border-t pt-2">
+                  <span>Jami stars:</span>
+                  <span className="font-bold text-orange-600">
+                    {totalDailyStars.toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>TON sarfi:</span>
+                  <span className="font-semibold">
+                    {totalTonSpent.toFixed(2)} TON
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="bg-green-50 rounded-xl p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <TrendingUp className="w-6 h-6 text-green-600" />
+                <h3 className="text-lg font-semibold text-green-900">
+                  Daromad
+                </h3>
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span>50 Stars:</span>
+                  <span className="font-semibold">
+                    {Math.round(revenue50).toLocaleString()} so'm
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>100 Stars:</span>
+                  <span className="font-semibold">
+                    {Math.round(revenue100).toLocaleString()} so'm
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm border-t pt-2">
+                  <span>Jami:</span>
+                  <span className="font-bold text-green-600">
+                    {Math.round(totalDailyRevenue).toLocaleString()} so'm
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm text-red-600">
+                  <span>Xarajat:</span>
+                  <span>
+                    -{Math.round(totalDailyCost).toLocaleString()} so'm
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-pink-50 rounded-xl p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Gift className="w-6 h-6 text-pink-600" />
+                <h3 className="text-lg font-semibold text-pink-900">
+                  Cashback
+                </h3>
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span>Cashback %:</span>
+                  <span className="font-semibold">{cashbackRate}%</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Kunlik stars:</span>
+                  <span className="font-semibold">
+                    {Math.round(totalCashbackStars)} stars
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>TON qiymat:</span>
+                  <span className="font-semibold">
+                    {cashbackCostTon.toFixed(3)} TON
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm border-t pt-2 text-red-600">
+                  <span>So'm qiymat:</span>
+                  <span className="font-bold">
+                    -{Math.round(cashbackCostUzb).toLocaleString()} so'm
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Yakuniy Natijalar */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-6">📈 Foyda Hisobi</h3>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-blue-100">Kunlik sof foyda:</span>
+                  <span className="text-3xl font-bold">
+                    {Math.round(dailyProfit).toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-blue-100">Oylik foyda:</span>
+                  <span className="text-3xl font-bold">
+                    {Math.round(monthlyProfit).toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center text-sm border-t border-blue-400 pt-3">
+                  <span className="text-blue-100">Profit margin:</span>
+                  <span className="text-xl font-semibold">{profitMargin}%</span>
+                </div>
+              </div>
+            </div>
+            <div className="bg-gradient-to-br from-purple-500 to-purple-700 rounded-xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-6">⏱️ Vaqt Tahlili</h3>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-purple-100">TON tugash muddati:</span>
+                  <span className="text-3xl font-bold">
+                    {Math.round(daysCanOperate)} kun
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-purple-100">
+                    ROI (qaytish muddati):
+                  </span>
+                  <span className="text-3xl font-bold">
+                    {Math.round(daysToRecoup)} kun
+                  </span>
+                </div>
+                <div className="flex justify-between items-center text-sm border-t border-purple-400 pt-3">
+                  <span className="text-purple-100">To'liq daromad:</span>
+                  <span className="text-xl font-semibold">
+                    {Math.round(dailyProfit * daysCanOperate).toLocaleString()}{" "}
+                    so'm
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Xulosa */}
+          <div className="mt-8 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-6">
+            <h3 className="text-xl font-bold text-green-800 mb-3">
+              💡 Xulosa va Tavsiyalar
+            </h3>
+            <div className="space-y-2 text-gray-700">
+              <p>
+                ✅ 204,000 so'm bilan siz{" "}
+                <strong>{tonAfterWallet.toFixed(2)} TON</strong> olasiz
+                (komissiya hisobida)
+              </p>
+              <p>
+                ✅ Kuniga {dailyCustomers} ta mijoz bo'lsa,{" "}
+                <strong>{Math.round(dailyProfit).toLocaleString()} so'm</strong>{" "}
+                kunlik foyda
+              </p>
+              <p>
+                ✅ Oylik foyda:{" "}
+                <strong>
+                  {Math.round(monthlyProfit).toLocaleString()} so'm
+                </strong>
+              </p>
+              <p>✅ TON {Math.round(daysCanOperate)} kun davom etadi</p>
+              <p>✅ Investitsiya {Math.round(daysToRecoup)} kunda qaytadi</p>
+              <p className="text-green-700 font-semibold mt-3">
+                ⭐️ Cashback tizimi mijozlarni ushlab qoladi va uzoq muddatda
+                ko'proq daromad keltiradi!
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

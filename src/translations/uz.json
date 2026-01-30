@@ -1,0 +1,59 @@
+{
+  "home": {
+    "purchaseStars": "Stars sotib olish",
+    "subtitle": "Hisobingizga premium valyuta qo‘shing",
+
+    "telegramUsername": "Telegram foydalanuvchi nomi",
+    "myUsername": "MENIKI",
+
+    "starsAmount": "Stars miqdori",
+    "starsLimit": "Min: 50 | Max: 10 000",
+
+    "stars": "STARS",
+
+    "paymentAmount": "To‘lov miqdori",
+    "cashback": "Kechbek",
+
+    "buy": "Sotib olish",
+
+    "premiumSupport": "Premium qo‘llab-quvvatlash",
+    "premiumSupportDesc": "Bizning premium qo‘llab-quvvatlash xizmati 24/7 xavfsiz to‘lovlar uchun mavjud.",
+
+    "secureFooter": "Telegram Stars Engine tomonidan himoyalangan to‘lov"
+  },
+  "payment": {
+    "title": "To'lov ma'lumotlari",
+
+    "virtualCard": "Virtual karta",
+    "cardDetails": "Karta ma'lumotlari",
+
+    "cardNumber": "Karta raqami",
+    "cardOwner": "Karta egasi",
+
+    "paymentWarning": "To'lov so'mmasini ko'rsatilgan qiymatda yuborishingiz kerak, aks holda tekshiruvdan o'tmasligi mumkin. E'tiborli bo'ling!",
+
+    "cashback": "Keshbek",
+    "statusActive": "Faol",
+
+    "verifyPayment": "To'lovni tekshirish",
+    "cancel": "Bekor qilish"
+  },
+  "confirm": {
+    "title": "To'lovni bekor qilmoqchimisiz?",
+    "continue": "Yo'q, davom etaman",
+    "cancel": "Ha, bekor qilaman"
+  },
+  "success": {
+    "title": "To'lov muvaffaqiyatli!",
+    "subtitle": "Stars hisobingizga tushirildi",
+    "cashbackLabel": "KESHBEK",
+    "again": "Yana stars olish"
+  },
+  "error": {
+    "title": "To'lov amalga oshmadi",
+    "description": "Xatolik yuz berdi, iltimos qaytadan urinib ko'ring",
+    "networkError": "Internet bilan aloqa uzildi",
+    "retry": "Qayta urinish",
+    "cancel": "Bekor qilish"
+  }
+}

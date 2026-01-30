@@ -1,0 +1,59 @@
+{
+  "home": {
+    "purchaseStars": "Покупка Stars",
+    "subtitle": "Пополните свой аккаунт премиальной валютой",
+
+    "telegramUsername": "Имя пользователя Telegram",
+    "myUsername": "МОЙ",
+
+    "starsAmount": "Количество stars",
+    "starsLimit": "Мин: 50 | Макс: 10 000",
+
+    "stars": "STARS",
+
+    "paymentAmount": "Сумма оплаты",
+    "cashback": "Кэшбэк ",
+
+    "buy": "Купить",
+
+    "premiumSupport": "Премиум поддержка",
+    "premiumSupportDesc": "Наша премиум поддержка доступна 24/7 для безопасных транзакций.",
+
+    "secureFooter": "Безопасный платёж на базе Telegram Stars Engine"
+  },
+  "payment": {
+    "title": "Данные платежа",
+
+    "virtualCard": "Виртуальная карта",
+    "cardDetails": "Данные карты",
+
+    "cardNumber": "Номер карты",
+    "cardOwner": "Владелец карты",
+
+    "paymentWarning": "Необходимо отправить точную сумму платежа, иначе проверка может не пройти. Будьте внимательны!",
+
+    "cashback": "Кэшбэк",
+    "statusActive": "Активно",
+
+    "verifyPayment": "Проверить платёж",
+    "cancel": "Отмена"
+  },
+  "confirm": {
+    "title": "Вы хотите отменить платёж?",
+    "continue": "Нет, продолжить",
+    "cancel": "Да, отменить"
+  },
+  "success": {
+    "title": "Платёж успешно выполнен!",
+    "subtitle": "Stars зачислены на ваш баланс",
+    "cashbackLabel": "КЕШБЭК",
+    "again": "Купить ещё Stars"
+  },
+  "error": {
+    "title": "Платёж не выполнен",
+    "description": "Произошла ошибка, пожалуйста попробуйте снова",
+    "networkError": "Соединение с интернетом потеряно",
+    "retry": "Повторить попытку",
+    "cancel": "Отмена"
+  }
+}
