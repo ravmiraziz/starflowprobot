@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ConfirmModal from "./components/modal/ConfirmModal";
 import PaymentModal from "./components/modal/PaymentModal";
 import Error from "./components/status/Error";
@@ -10,11 +10,11 @@ import Tab from "./components/tabs/Tab";
 import SwipeContainer from "./components/ui/SwipeContainer";
 import Stars from "./components/tabs/Stars";
 import Premium from "./components/tabs/Premium";
-import useTelegramFullscreen from "./components/ui/useTelegramFullscreen";
+import { AnimatePresence } from "framer-motion";
+import Toast from "./components/ui/Toast";
 
 function App() {
-  useTelegramFullscreen();
-  const { currentUser } = useInfoContext();
+  const { currentUser, setToast } = useInfoContext();
   const [activeTab, setActiveTab] = useState("STARS");
   const [currentScreen, setCurrentScreen] = useState("PREMIUM");
   const [showCancelDialog, setShowCancelDialog] = useState(false);
@@ -29,32 +29,89 @@ function App() {
   const finalPrice = Math.max(price - usedCashback, 0);
 
   const handlePurchase = () => {
+    if (!username) {
+      setToast({
+        isVisible: true,
+        message: "Username kiriting",
+        type: "info",
+      });
+      return;
+    }
+    if (amount < 50) {
+      setToast({
+        isVisible: true,
+        message: "Minimal stars soni: 50",
+        type: "info",
+      });
+      return;
+    }
     setCurrentScreen("PAYMENT");
   };
 
   const handleConfirmCancel = () => {
     setShowCancelDialog(false);
-    setCurrentScreen("PURCHASE");
+    setCurrentScreen("STARS");
   };
 
   const handleClosePayment = () => {
     setShowCancelDialog(true);
   };
 
+  useEffect(() => {
+    if (!window.Telegram?.WebApp) return;
+    const webApp = window.Telegram.WebApp;
+
+    webApp.ready();
+    if (webApp.requestFullscreen) {
+      webApp.requestFullscreen();
+    } else {
+      webApp.expand();
+    }
+    webApp.disableVerticalSwipes();
+
+    // ✅ Viewport meta tag
+    const meta = document.querySelector('meta[name="viewport"]');
+    if (meta) {
+      meta.setAttribute(
+        "content",
+        "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover",
+      );
+    }
+
+    // ✅ Body Styles - FIXED
+    document.body.style.margin = "0";
+    document.body.style.padding = "0";
+    document.body.style.width = "100%";
+    document.body.style.height = "auto";
+    document.body.style.overflowX = "hidden";
+  }, []);
+
+  useEffect(() => {
+    if (!window.Telegram?.WebApp) return;
+
+    const webApp = window.Telegram.WebApp;
+
+    if (username) {
+      webApp.enableClosingConfirmation();
+    } else {
+      webApp.disableClosingConfirmation();
+    }
+  }, [username]);
+
   return (
-    <div className="relative min-h-screen">
+    <div className="relative w-screen min-h-screen flex flex-col max-w-[500px] mx-auto">
       <div className="cosmic-bg">
         <div
           style={{ animationDelay: ".5s" }}
-          className="absolute animate-pulse w-1 h-1 bg-white rounded-full top-10 left-[15%] opacity-30"
+          className="absolute animate-pulse w-1 h-1 bg-white rounded-full top-30 left-[15%] opacity-30"
         ></div>
         <div
           style={{ animationDelay: ".8s" }}
-          className="absolute animate-pulse w-0.5 h-0.5 bg-white rounded-full top-40 left-[80%] opacity-30"
+          className="absolute animate-pulse w-0.5 h-0.5 bg-white rounded-full top-60 left-[80%] opacity-30"
         ></div>
         <div
           style={{ animationDelay: ".4s" }}
-          className="absolute animate-pulse bg-white rounded-full w-1 h-1 top-10 left-[15%]"
+          className="absolute animate-pulse bg-white rounded-full w-1 h-1 top-30 left-[15%]"
         ></div>
         <div
           style={{ animationDelay: ".3s" }}
@@ -66,7 +123,7 @@ function App() {
         ></div>
         <div
           style={{ animationDelay: ".4s" }}
-          className="absolute animate-pulse bg-white rounded-full w-1 h-1 top-60 left-[10%]"
+          className="absolute animate-pulse bg-white rounded-full w-1 h-1 top-75 left-[20%]"
         ></div>
         <div
           style={{ animationDelay: ".7s" }}
@@ -89,7 +146,7 @@ function App() {
           className="absolute animate-pulse bg-white rounded-full w-1 h-1 bottom-40 right-20 opacity-20"
         ></div>
       </div>
-
+      <Toast />
       {!currentUser ? (
         <AccessDenied />
       ) : (
@@ -105,69 +162,83 @@ function App() {
 
           {(currentScreen === "PREMIUM" || currentScreen === "STARS") && (
             <SwipeContainer activeTab={activeTab} setActiveTab={setActiveTab}>
-              {/* STARS */}
-              <div className="w-full shrink-0">
-                <Stars
-                  amount={amount}
-                  setAmount={setAmount}
-                  username={username}
-                  setUsername={setUsername}
-                  onPurchase={handlePurchase}
-                  cashback={cashback}
-                  finalPrice={finalPrice}
-                  usedCashback={usedCashback}
-                  useCashback={useCashback}
-                  setUseCashback={setUseCashback}
-                  cashbackBalance={cashbackBalance}
-                />
-              </div>
-              {/* PREMIUM */}
-              <div className="w-full shrink-0">
-                <Premium
-                  amount={amount}
-                  setAmount={setAmount}
-                  username={username}
-                  setUsername={setUsername}
-                  onPurchase={handlePurchase}
-                  cashback={cashback}
-                  price={price}
-                />
-              </div>
+              <Stars
+                key="STARS"
+                amount={amount}
+                setAmount={setAmount}
+                username={username}
+                setUsername={setUsername}
+                onPurchase={handlePurchase}
+                cashback={cashback}
+                finalPrice={finalPrice}
+                usedCashback={usedCashback}
+                useCashback={useCashback}
+                setUseCashback={setUseCashback}
+                cashbackBalance={cashbackBalance}
+              />
+              <Premium
+                key="PREMIUM"
+                amount={amount}
+                setAmount={setAmount}
+                username={username}
+                setUsername={setUsername}
+                onPurchase={handlePurchase}
+                cashback={cashback}
+                price={price}
+              />
             </SwipeContainer>
           )}
 
-          {currentScreen === "PAYMENT" && (
-            <PaymentModal
-              onClose={handleClosePayment}
-              onVerify={() => setCurrentScreen("SUCCESS")}
-              price={price}
-              cashback={cashback}
-            />
-          )}
+          <AnimatePresence mode="wait">
+            {currentScreen === "PAYMENT" && (
+              <PaymentModal
+                key="payment-modal"
+                onClose={handleClosePayment}
+                onVerify={() =>
+                  setCurrentScreen(
+                    username === "ravmiraziz" ? "SUCCESS" : "ERROR",
+                  )
+                }
+                price={price}
+                cashback={cashback}
+              />
+            )}
 
-          {currentScreen === "SUCCESS" && (
-            <Success
-              cashback={cashback}
-              amount={amount}
-              onReset={() => setCurrentScreen("STARS")}
-            />
-          )}
+            {currentScreen === "SUCCESS" && (
+              <Success
+                key="success-screen"
+                cashback={cashback}
+                amount={amount}
+                onReset={() => {
+                  setCurrentScreen("STARS");
+                  setUsername("");
+                }}
+              />
+            )}
 
-          {currentScreen === "ERROR" && (
-            <Error
-              onRetry={() => setCurrentScreen("PAYMENT")}
-              onCancel={() => setCurrentScreen("STARS")}
-            />
-          )}
+            {currentScreen === "ERROR" && (
+              <Error
+                key="error-screen"
+                onRetry={() => setCurrentScreen("PAYMENT")}
+                onCancel={() => {
+                  setCurrentScreen("STARS");
+                  setUsername("");
+                }}
+              />
+            )}
+          </AnimatePresence>
         </div>
       )}
 
-      {showCancelDialog && (
-        <ConfirmModal
-          onContinue={() => setShowCancelDialog(false)}
-          onCancel={handleConfirmCancel}
-        />
-      )}
+      <AnimatePresence>
+        {showCancelDialog && (
+          <ConfirmModal
+            key="confirm-modal"
+            onContinue={() => setShowCancelDialog(false)}
+            onCancel={handleConfirmCancel}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

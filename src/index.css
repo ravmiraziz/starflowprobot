@@ -3,13 +3,6 @@
 ::-webkit-scrollbar {
   display: none;
 }
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
 
 :root {
   --primary: #f2b90d;
@@ -20,20 +13,28 @@
   --cosmic-gold: #2d2412;
 }
 
-button {
-  cursor: pointer;
-  outline: none;
-}
-
-input,
-textarea,
-select,
-button {
-  outline: none;
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  color: white;
+  height: 100%;
 }
 
 body {
-  color: white;
+  overflow-x: hidden;
+  background: var(--cosmic-black);
+}
+
+button, input, textarea, select {
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .cosmic-bg {
@@ -52,6 +53,7 @@ body {
   position: fixed;
   inset: 0;
   z-index: -10;
+  transform: translateZ(0); /* Hardware accelerate background */
 }
 
 .vertual {
@@ -60,99 +62,52 @@ body {
   background-size: cover;
 }
 
-.star-particle {
-  position: absolute;
-  background: white;
-  border-radius: 50%;
-  opacity: 0.3;
-}
 .glass-card {
   background: rgba(20, 20, 22, 0.7);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(16px); /* Reduced from 24px for mobile performance */
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transform: translateZ(0); /* Trigger GPU composition */
 }
+
 .gold-glow {
   box-shadow: 0 4px 20px rgba(242, 185, 13, 0.4);
 }
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.cosmic-black {
-  background: var(--cosmic-black);
-}
-.cosmic-charcoal {
-  background: var(--cosmic-charcoal);
-}
 
-.cosmic-purple {
-  background: var(--cosmic-purple);
-}
-.cosmic-gold {
-  background: var(--cosmic-gold);
-}
-
-.bg-primary {
-  background: var(--primary);
-}
-
-.text-primary {
-  color: var(--primary);
-}
-
-.cosmic-bg {
-  background:
-    radial-gradient(
-      circle at top left,
-      rgba(45, 27, 77, 0.25),
-      transparent 40%
-    ),
-    radial-gradient(
-      circle at bottom right,
-      rgba(242, 185, 13, 0.08),
-      transparent 40%
-    ),
-    radial-gradient(circle at 50% 50%, rgba(26, 26, 30, 1), #0c0c0e);
-  position: fixed;
-  inset: 0;
-  z-index: -10;
-}
-.glass-card {
-  background: rgba(20, 20, 22, 0.7);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-.gold-glow {
-  box-shadow: 0 4px 20px rgba(242, 185, 13, 0.4);
-}
 .error-star-glow {
   filter: drop-shadow(0 0 30px rgba(255, 77, 77, 0.4));
 }
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
-@keyframes float {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
+/* Utilities */
+.cosmic-black { background: var(--cosmic-black); }
+.cosmic-charcoal { background: var(--cosmic-charcoal); }
+.cosmic-purple { background: var(--cosmic-purple); }
+.cosmic-gold { background: var(--cosmic-gold); }
+.bg-primary { background: var(--primary); }
+.text-primary { color: var(--primary); }
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
 }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
 .floating {
   animation: float 3s ease-in-out infinite;
+  will-change: transform;
 }

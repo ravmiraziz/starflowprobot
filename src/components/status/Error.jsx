@@ -1,60 +1,118 @@
 import { RiSignalWifiErrorFill } from "react-icons/ri";
 import { MdClose, MdStar } from "react-icons/md";
 import { useLanguage } from "../../context/LanguageContext";
+import { motion } from "framer-motion";
 
 const Error = ({ onRetry, onCancel }) => {
   const { t } = useLanguage();
-  return (
-    <div className="fixed inset-0 z-[100] flex flex-col items-center justify-between p-6 bg-[#0a0a0c]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,_rgba(255,77,77,0.08)_0%,_rgba(10,10,12,1)_70%)] pointer-events-none"></div>
 
-      <div className="w-full flex justify-end z-10">
-        <button
-          onClick={onCancel}
-          className="size-10 rounded-full bg-white/5 flex items-center justify-center"
-        >
-          <MdClose className="text-white/40 text-2xl" />
-        </button>
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+    exit: { opacity: 0 },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20, scale: 0.9 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { type: "spring", stiffness: 400, damping: 30 },
+    },
+  };
+
+  return (
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      variants={containerVariants}
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-between p-5 bg-[#0a0a0c]/90 backdrop-blur-2xl"
+    >
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 size-80 bg-red-500/20 rounded-full blur-[120px] animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 size-64 bg-[#f2b90d]/10 rounded-full blur-[100px]"></div>
       </div>
 
-      <div className="flex flex-col items-center text-center z-10">
-        <div className="relative mb-12 flex h-40 w-40 items-center justify-center rounded-full bg-gradient-to-tr from-[#ff4d4d] to-[#f2b90d] p-1 error-star-glow">
-          <div className="flex h-full w-full items-center justify-center rounded-full bg-[#0a0a0c]">
-            <MdStar className="text-[80px] text-[#ff4d4d]" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <MdClose className="text-[100px] text-black/70 font-light translate-y-1" />
-            </div>
+      <motion.div
+        variants={itemVariants}
+        className="w-full flex justify-end relative z-10 mt-11"
+      >
+        <button
+          onClick={onCancel}
+          className="size-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors backdrop-blur-md"
+        >
+          <MdClose className="text-white text-xl" />
+        </button>
+      </motion.div>
+
+      <div className="flex flex-col items-center text-center w-full max-w-md relative z-10">
+        <motion.div variants={itemVariants} className="relative mb-8">
+          <motion.div
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute inset-0 bg-red-500/20 blur-3xl rounded-full"
+          />
+          <div className="size-32 bg-gradient-to-br from-[#ff4d4d] to-[#cc0000] rounded-[32px] flex items-center justify-center relative z-10 shadow-[0_10px_40px_rgba(255,77,77,0.4)] rotate-3 border-4 border-[#0a0a0c]">
+            <MdStar className="text-7xl text-black/20 absolute" />
+            <MdClose className="text-6xl text-white relative z-10" />
           </div>
-        </div>
+        </motion.div>
 
-        <h1 className="text-3xl font-black mb-3 tracking-tight">
+        <motion.h1
+          variants={itemVariants}
+          className="text-3xl font-black mb-2 tracking-tight text-white drop-shadow-lg"
+        >
           {t("error.title")}
-        </h1>
-        <p className="text-white/60 text-lg px-8">{t("error.description")}</p>
+        </motion.h1>
+        <motion.p
+          variants={itemVariants}
+          className="text-white/60 text-lg font-medium mb-8 px-8"
+        >
+          {t("error.description")}
+        </motion.p>
 
-        <div className="mt-10 bg-white/5 border border-red-500/20 backdrop-blur-md flex items-center gap-3 rounded-2xl p-4 min-w-[280px]">
-          <RiSignalWifiErrorFill className="text-red-500" />
-          <p className="text-sm font-medium text-white/80">
+        <motion.div
+          variants={itemVariants}
+          className="bg-white/5 border border-red-500/20 backdrop-blur-xl flex items-center gap-4 rounded-2xl p-5 min-w-[280px]"
+        >
+          <div className="size-10 rounded-full bg-red-500/10 flex items-center justify-center text-red-500">
+            <RiSignalWifiErrorFill className="text-xl" />
+          </div>
+          <p className="text-sm font-medium text-white/80 text-left">
             {t("error.networkError")}
           </p>
-        </div>
+        </motion.div>
       </div>
 
-      <div className="w-full max-w-sm z-10 space-y-3">
-        <button
+      <motion.div
+        variants={itemVariants}
+        className="w-full max-w-sm z-10 space-y-3 pb-4"
+      >
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.95 }}
           onClick={onRetry}
-          className="w-full h-16 rounded-full bg-gradient-to-r from-red-500 to-[#f2b90d] text-black font-black text-lg uppercase tracking-widest shadow-lg shadow-red-500/20 active:scale-95 transition-all"
+          className="w-full h-16 rounded-3xl bg-gradient-to-r from-[#ff4d4d] via-[#ff6666] to-[#ff4d4d] text-white font-black text-lg uppercase tracking-widest shadow-[0_10px_40px_rgba(255,77,77,0.3)] flex items-center justify-center relative overflow-hidden group"
         >
-          {t("error.retry")}
-        </button>
-        <button
+          <span className="relative z-10">{t("error.retry")}</span>
+        </motion.button>
+        <motion.button
+          whileTap={{ scale: 0.95 }}
           onClick={onCancel}
-          className="w-full h-14 rounded-full text-white/40 font-bold text-lg active:scale-95 transition-all"
+          className="w-full h-14 rounded-3xl text-white/40 font-bold text-sm uppercase tracking-widest hover:text-white transition-colors"
         >
           {t("error.cancel")}
-        </button>
-      </div>
-    </div>
+        </motion.button>
+      </motion.div>
+    </motion.div>
   );
 };
 

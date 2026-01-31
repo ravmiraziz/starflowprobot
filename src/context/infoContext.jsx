@@ -9,7 +9,11 @@ export const InfoProvider = ({ children }) => {
     username: "ravmiraziz",
     cashback: 120000,
   });
-
+  const [toast, setToast] = useState({
+    isVisible: false,
+    message: "",
+    type: "success",
+  });
   // 20000 -> "20 000"
   const formatNumber = (value) => {
     if (value === null || value === undefined) return "";
@@ -31,7 +35,7 @@ export const InfoProvider = ({ children }) => {
           console.warn("Telegram user topilmadi");
           return;
         }
-        setCurrentUser(tgUser);
+        setCurrentUser({ ...tgUser, cashback: 1200000 });
         console.log(tgUser);
       } catch (err) {
         console.error("User olishda xatolik:", err);
@@ -45,6 +49,8 @@ export const InfoProvider = ({ children }) => {
     setCurrentUser,
     formatNumber,
     parseNumber,
+    toast,
+    setToast,
   };
 
   return <InfoContext.Provider value={value}>{children}</InfoContext.Provider>;
