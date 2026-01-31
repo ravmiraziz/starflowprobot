@@ -25,12 +25,12 @@ const Success = ({ cashback, amount, onReset }) => {
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20, scale: 0.9 },
+    hidden: { opacity: 0, y: 20, scale: 0.95 },
     visible: {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { type: "spring", stiffness: 400, damping: 30 },
+      transition: { type: "spring", stiffness: 300, damping: 30 },
     },
   };
 
@@ -40,16 +40,16 @@ const Success = ({ cashback, amount, onReset }) => {
       animate="visible"
       exit="exit"
       variants={containerVariants}
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-between p-5 bg-[#0a0a0c]/90 backdrop-blur-2xl"
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-between p-5 bg-[#0a0a0c]/90 backdrop-blur-xl gpu-accelerated"
     >
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 size-80 bg-[#f2b90d]/20 rounded-full blur-[120px] animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 size-64 bg-purple-500/10 rounded-full blur-[100px]"></div>
+        <div className="absolute top-1/4 left-1/4 size-80 bg-[#f2b90d]/20 rounded-full blur-[60px] animate-pulse translate-z-0"></div>
+        <div className="absolute bottom-1/4 right-1/4 size-64 bg-purple-500/10 rounded-full blur-[60px] translate-z-0"></div>
       </div>
 
       <Confetti
         recycle={false}
-        numberOfPieces={500}
+        numberOfPieces={100}
         width={width}
         height={height}
         gravity={0.2}
@@ -58,6 +58,7 @@ const Success = ({ cashback, amount, onReset }) => {
       <motion.div
         variants={itemVariants}
         className="w-full flex justify-end relative z-10 mt-11"
+        style={{ willChange: "transform, opacity" }}
       >
         <button
           onClick={onReset}
@@ -68,11 +69,15 @@ const Success = ({ cashback, amount, onReset }) => {
       </motion.div>
 
       <div className="flex flex-col items-center text-center w-full max-w-md relative z-10">
-        <motion.div variants={itemVariants} className="relative mb-8">
+        <motion.div
+          variants={itemVariants}
+          className="relative mb-8"
+          style={{ willChange: "transform, opacity" }}
+        >
           <motion.div
-            animate={{ scale: [1, 1.2, 1], rotate: [0, 10, -10, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute inset-0 bg-[#f2b90d]/30 blur-3xl rounded-full"
+            animate={{ scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute inset-0 bg-[#f2b90d]/30 blur-2xl rounded-full translate-z-0"
           />
           <div className="size-32 bg-gradient-to-br from-[#f2b90d] to-[#ffdb4d] rounded-[32px] flex items-center justify-center relative z-10 shadow-[0_10px_40px_rgba(242,185,13,0.4)] rotate-3">
             <MdStar className="text-7xl text-black drop-shadow-sm" />
@@ -82,12 +87,14 @@ const Success = ({ cashback, amount, onReset }) => {
         <motion.h1
           variants={itemVariants}
           className="text-3xl font-black mb-2 tracking-tight text-white drop-shadow-lg"
+          style={{ willChange: "transform, opacity" }}
         >
           {t("success.title")}
         </motion.h1>
         <motion.p
           variants={itemVariants}
           className="text-white/60 text-lg font-medium mb-8"
+          style={{ willChange: "transform, opacity" }}
         >
           {t("success.subtitle")}
         </motion.p>
@@ -95,7 +102,8 @@ const Success = ({ cashback, amount, onReset }) => {
         <div className="flex flex-col w-full gap-3">
           <motion.div
             variants={itemVariants}
-            className="glass-card p-2 rounded-[24px] border border-white/10 bg-white/5 backdrop-blur-xl flex items-center justify-between"
+            className="glass-card p-2 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-lg flex items-center justify-between gpu-accelerated"
+            style={{ willChange: "transform, opacity" }}
           >
             <div className="flex items-center gap-4">
               <div className="size-11 rounded-2xl bg-[#f2b90d]/10 flex items-center justify-center text-[#f2b90d]">
@@ -118,7 +126,8 @@ const Success = ({ cashback, amount, onReset }) => {
           <motion.div
             variants={itemVariants}
             whileHover={{ scale: 1.02 }}
-            className="glass-card p-2 rounded-[24px] border border-white/10 bg-white/5 backdrop-blur-xl flex items-center justify-between"
+            className="glass-card p-2 rounded-[24px] border border-white/10 bg-white/5 backdrop-blur-lg flex items-center justify-between gpu-accelerated"
+            style={{ willChange: "transform, opacity" }}
           >
             <div className="flex items-center gap-4">
               <div className="size-11 rounded-2xl bg-white/10 flex items-center justify-center text-white">
@@ -143,6 +152,7 @@ const Success = ({ cashback, amount, onReset }) => {
       <motion.div
         variants={itemVariants}
         className="w-full max-w-sm relative z-10 pb-4"
+        style={{ willChange: "transform, opacity" }}
       >
         <motion.button
           whileHover={{ scale: 1.02 }}

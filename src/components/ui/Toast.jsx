@@ -34,7 +34,7 @@ const Toast = () => {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -20, scale: 0.9 }}
           transition={{ type: "spring", stiffness: 400, damping: 30 }}
-          className={`fixed mt-15 top-6 left-1/2 -translate-x-1/2 z-[300] flex items-center gap-3 px-6 py-4 rounded-2xl backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.3)] border ${bgColors[toast.type] || bgColors.success} min-w-[300px] justify-center`}
+          className={`fixed mt- top-6 left-1/2 -translate-x-1/2 z-300 flex items-center gap-3 px-6 py-4 rounded-2xl backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.3)] border ${bgColors[toast.type] || bgColors.success} min-w-[300px] justify-center`}
         >
           <div className={`p-1 rounded-full bg-white/5`}>
             {icons[toast.type] || icons.success}

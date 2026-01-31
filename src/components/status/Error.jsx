@@ -19,12 +19,12 @@ const Error = ({ onRetry, onCancel }) => {
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20, scale: 0.9 },
+    hidden: { opacity: 0, y: 20, scale: 0.95 },
     visible: {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { type: "spring", stiffness: 400, damping: 30 },
+      transition: { type: "spring", stiffness: 300, damping: 30 },
     },
   };
 
@@ -34,16 +34,17 @@ const Error = ({ onRetry, onCancel }) => {
       animate="visible"
       exit="exit"
       variants={containerVariants}
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-between p-5 bg-[#0a0a0c]/90 backdrop-blur-2xl"
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-between p-5 bg-[#0a0a0c]/90 backdrop-blur-xl gpu-accelerated"
     >
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 size-80 bg-red-500/20 rounded-full blur-[120px] animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 size-64 bg-[#f2b90d]/10 rounded-full blur-[100px]"></div>
+        <div className="absolute top-1/4 left-1/4 size-80 bg-red-500/10 rounded-full blur-[60px] animate-pulse translate-z-0"></div>
+        <div className="absolute bottom-1/4 right-1/4 size-64 bg-[#f2b90d]/10 rounded-full blur-[60px] translate-z-0"></div>
       </div>
 
       <motion.div
         variants={itemVariants}
-        className="w-full flex justify-end relative z-10 mt-11"
+        className="w-full flex justify-end relative z-10 mt-20"
+        style={{ willChange: "transform, opacity" }}
       >
         <button
           onClick={onCancel}
@@ -69,12 +70,14 @@ const Error = ({ onRetry, onCancel }) => {
         <motion.h1
           variants={itemVariants}
           className="text-3xl font-black mb-2 tracking-tight text-white drop-shadow-lg"
+          style={{ willChange: "transform, opacity" }}
         >
           {t("error.title")}
         </motion.h1>
         <motion.p
           variants={itemVariants}
           className="text-white/60 text-lg font-medium mb-8 px-8"
+          style={{ willChange: "transform, opacity" }}
         >
           {t("error.description")}
         </motion.p>
@@ -82,6 +85,7 @@ const Error = ({ onRetry, onCancel }) => {
         <motion.div
           variants={itemVariants}
           className="bg-white/5 border border-red-500/20 backdrop-blur-xl flex items-center gap-4 rounded-2xl p-5 min-w-[280px]"
+          style={{ willChange: "transform, opacity" }}
         >
           <div className="size-10 rounded-full bg-red-500/10 flex items-center justify-center text-red-500">
             <RiSignalWifiErrorFill className="text-xl" />
@@ -95,6 +99,7 @@ const Error = ({ onRetry, onCancel }) => {
       <motion.div
         variants={itemVariants}
         className="w-full max-w-sm z-10 space-y-3 pb-4"
+        style={{ willChange: "transform, opacity" }}
       >
         <motion.button
           whileHover={{ scale: 1.02 }}
