@@ -1,4 +1,3 @@
-import React from "react";
 import { MdPersonSearch, MdPriorityHigh } from "react-icons/md";
 import { motion } from "framer-motion";
 
@@ -9,9 +8,9 @@ const AccessDenied = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
+        delayChildren: 0.2,
+      },
+    },
   };
 
   const itemVariants = {
@@ -20,8 +19,8 @@ const AccessDenied = () => {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { type: "spring", stiffness: 400, damping: 30 }
-    }
+      transition: { type: "spring", stiffness: 400, damping: 30 },
+    },
   };
 
   return (
@@ -50,7 +49,12 @@ const AccessDenied = () => {
               className="absolute inset-0 border border-[#f2b90d]/30 rounded-full"
               initial={{ scale: 1, opacity: 1 }}
               animate={{ scale: 2, opacity: 0 }}
-              transition={{ duration: 2, repeat: Infinity, delay: i * 0.4, ease: "easeOut" }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                delay: i * 0.4,
+                ease: "easeOut",
+              }}
             />
           ))}
 
@@ -69,18 +73,31 @@ const AccessDenied = () => {
         </motion.div>
 
         <div className="flex flex-col items-center gap-4 text-center">
-          <motion.h2 variants={itemVariants} className="text-white text-3xl font-black leading-tight tracking-tight">
-            Foydalanuvchi<br />topilmadi
+          <motion.h2
+            variants={itemVariants}
+            className="text-white text-3xl font-black leading-tight tracking-tight"
+          >
+            Foydalanuvchi
+            <br />
+            topilmadi
           </motion.h2>
-          <motion.p variants={itemVariants} className="text-white/60 text-sm font-medium leading-relaxed px-2">
+          <motion.p
+            variants={itemVariants}
+            className="text-white/60 text-sm font-medium leading-relaxed px-2"
+          >
             Kiritilgan username bo‘yicha ma’lumot topilmadi. Stars tushirib
             berishimiz uchun avval botimizga kirib{" "}
-            <span className="text-[#f2b90d] font-bold bg-[#f2b90d]/10 px-2 py-0.5 rounded-md">"Start"</span>{" "}
+            <span className="text-[#f2b90d] font-bold bg-[#f2b90d]/10 px-2 py-0.5 rounded-md">
+              "Start"
+            </span>{" "}
             tugmasini bosgan bo‘lishingiz kerak.
           </motion.p>
         </div>
 
-        <motion.div variants={itemVariants} className="w-full flex flex-col gap-3">
+        <motion.div
+          variants={itemVariants}
+          className="w-full flex flex-col gap-3"
+        >
           <a
             href="https://t.me/starflowprobot"
             className="group relative w-full flex items-center justify-center h-16 rounded-[2rem] bg-gradient-to-r from-[#f2b90d] via-[#ffd04d] to-[#f2b90d] shadow-[0_8px_25px_-6px_rgba(242,185,13,0.5)] overflow-hidden transition-transform active:scale-95"

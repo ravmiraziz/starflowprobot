@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import ChangeLang from "../modal/ChangeLang";
 import { BiSupport } from "react-icons/bi";
 import { motion, AnimatePresence } from "framer-motion";
+import { useInfoContext } from "../../context/infoContext";
 
 const SwipeContainer = ({ activeTab, setActiveTab, children }) => {
   const [startX, setStartX] = useState(null);
+  const { currentUser } = useInfoContext();
 
   const onTouchStart = (e) => {
     setStartX(e.touches[0].clientX);
@@ -83,7 +85,16 @@ const SwipeContainer = ({ activeTab, setActiveTab, children }) => {
           className="relative z-10 flex items-center justify-center w-12 h-12 rounded-full font-black text-xs tracking-wider transition-colors bg-white/10 text-white"
           whileTap={{ scale: 0.9 }}
         >
-          <BiSupport className="text-lg text-[#f2b90d]" />
+          <a
+            href={
+              currentUser.language === "ru"
+                ? "https://t.me/+998934905134"
+                : "https://t.me/+998996860307"
+            }
+            className="h-full w-full flex items-center justify-center"
+          >
+            <BiSupport className="text-lg text-[#f2b90d]" />
+          </a>
         </motion.button>
       </div>
 

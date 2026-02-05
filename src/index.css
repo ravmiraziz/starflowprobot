@@ -26,9 +26,13 @@ body,
 body {
   overflow-x: hidden;
   background: var(--cosmic-black);
+  user-select: none;
 }
 
-button, input, textarea, select {
+button,
+input,
+textarea,
+select {
   outline: none;
 }
 
@@ -89,12 +93,24 @@ button {
 }
 
 /* Utilities */
-.cosmic-black { background: var(--cosmic-black); }
-.cosmic-charcoal { background: var(--cosmic-charcoal); }
-.cosmic-purple { background: var(--cosmic-purple); }
-.cosmic-gold { background: var(--cosmic-gold); }
-.bg-primary { background: var(--primary); }
-.text-primary { color: var(--primary); }
+.cosmic-black {
+  background: var(--cosmic-black);
+}
+.cosmic-charcoal {
+  background: var(--cosmic-charcoal);
+}
+.cosmic-purple {
+  background: var(--cosmic-purple);
+}
+.cosmic-gold {
+  background: var(--cosmic-gold);
+}
+.bg-primary {
+  background: var(--primary);
+}
+.text-primary {
+  color: var(--primary);
+}
 
 .gpu-accelerated {
   transform: translateZ(0);
@@ -103,8 +119,13 @@ button {
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .floating {

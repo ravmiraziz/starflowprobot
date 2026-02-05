@@ -19,11 +19,11 @@ export const LanguageProvider = ({ children }) => {
   const [lang, setLang] = useState(getInitialLang);
 
   useEffect(() => {
-    if (currentUser?.lang && currentUser.lang !== lang) {
-      setLang(currentUser.lang);
-      localStorage.setItem("lang", currentUser.lang);
+    if (currentUser?.language && currentUser.language !== lang) {
+      setLang(currentUser.language);
+      localStorage.setItem("lang", currentUser.language);
     }
-  }, [currentUser?.lang]);
+  }, [currentUser?.language]);
 
   const t = (key, vars = {}) => {
     let text =

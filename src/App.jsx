@@ -12,45 +12,49 @@ import Stars from "./components/tabs/Stars";
 import Premium from "./components/tabs/Premium";
 import { AnimatePresence } from "framer-motion";
 import Toast from "./components/ui/Toast";
+import Dashboard from "./pages/admin/Dashboard";
+import { useAdminContext } from "./context/AdminContext";
+import UserModal from "./components/modal/UserModal";
+import { putData } from "./api/api";
+import { useLanguage } from "./context/LanguageContext";
 
 function App() {
-  const { currentUser, setToast } = useInfoContext();
+  const { currentUser, currentScreen, setCurrentScreen, loading, setToast } =
+    useInfoContext();
+  const { updateUser, getData: getAdminData } = useAdminContext();
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState("STARS");
-  const [currentScreen, setCurrentScreen] = useState("PREMIUM");
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [amount, setAmount] = useState(100);
   const [username, setUsername] = useState("");
-  const price = amount * 220; // Example conversion
-  const cashback = Math.floor(price * 0.01);
-  const [useCashback, setUseCashback] = useState(false);
+  const [pendingData, setPendingData] = useState(null);
+  const [price, setPrice] = useState(
+    amount * (currentUser?.star_prices[0]?.price || 220),
+  ); // Example conversion
+  const [cashback, setCashback] = useState(0);
 
-  const cashbackBalance = currentUser?.cashback || 0;
-  const usedCashback = useCashback ? Math.min(price, cashbackBalance) : 0;
-  const finalPrice = Math.max(price - usedCashback, 0);
-
-  const handlePurchase = () => {
-    if (!username) {
-      setToast({
-        isVisible: true,
-        message: "Username kiriting",
-        type: "info",
-      });
-      return;
+  useEffect(() => {
+    if (currentUser?.is_admin && currentScreen === "ADMIN") {
+      getAdminData();
     }
-    if (amount < 50) {
-      setToast({
-        isVisible: true,
-        message: "Minimal stars soni: 50",
-        type: "info",
-      });
-      return;
-    }
-    setCurrentScreen("PAYMENT");
-  };
+  }, [currentScreen, currentUser]);
 
-  const handleConfirmCancel = () => {
+  useEffect(() => {
+    setPrice(amount * (currentUser?.star_prices[0]?.price || 220));
+  }, [amount]);
+
+  console.log(price);
+
+  const handleConfirmCancel = async () => {
+    await putData("cancel-purchase", { id: currentUser?.id });
+    setPendingData(null);
     setShowCancelDialog(false);
     setCurrentScreen("STARS");
+    setToast({
+      isVisible: true,
+      message: t("home.canceled"),
+      type: "success",
+    });
   };
 
   const handleClosePayment = () => {
@@ -147,12 +151,17 @@ function App() {
         ></div>
       </div>
       <Toast />
-      {!currentUser ? (
+      {loading ? (
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#f2b90d]"></div>
+        </div>
+      ) : !currentUser ? (
         <AccessDenied />
       ) : (
         <div
           className={`transition-all duration-300 ${showCancelDialog ? "blur-md brightness-[0.3]" : ""}`}
         >
+          {currentScreen === "ADMIN" && <Dashboard />}
           {(currentScreen === "PREMIUM" || currentScreen === "STARS") && (
             <TopNav />
           )}
@@ -164,27 +173,22 @@ function App() {
             <SwipeContainer activeTab={activeTab} setActiveTab={setActiveTab}>
               <Stars
                 key="STARS"
+                price={price}
                 amount={amount}
                 setAmount={setAmount}
                 username={username}
                 setUsername={setUsername}
-                onPurchase={handlePurchase}
-                cashback={cashback}
-                finalPrice={finalPrice}
-                usedCashback={usedCashback}
-                useCashback={useCashback}
-                setUseCashback={setUseCashback}
-                cashbackBalance={cashbackBalance}
+                setPrice={setPrice}
+                setCashback={setCashback}
+                setPendingData={setPendingData}
               />
               <Premium
                 key="PREMIUM"
-                amount={amount}
-                setAmount={setAmount}
                 username={username}
                 setUsername={setUsername}
-                onPurchase={handlePurchase}
-                cashback={cashback}
-                price={price}
+                setPrice={setPrice}
+                setCashback={setCashback}
+                setPendingData={setPendingData}
               />
             </SwipeContainer>
           )}
@@ -192,13 +196,10 @@ function App() {
           <AnimatePresence mode="wait">
             {currentScreen === "PAYMENT" && (
               <PaymentModal
+                data={pendingData}
+                setData={setPendingData}
                 key="payment-modal"
                 onClose={handleClosePayment}
-                onVerify={() =>
-                  setCurrentScreen(
-                    username === "ravmiraziz" ? "SUCCESS" : "ERROR",
-                  )
-                }
                 price={price}
                 cashback={cashback}
               />
@@ -219,7 +220,6 @@ function App() {
             {currentScreen === "ERROR" && (
               <Error
                 key="error-screen"
-                onRetry={() => setCurrentScreen("PAYMENT")}
                 onCancel={() => {
                   setCurrentScreen("STARS");
                   setUsername("");
@@ -229,7 +229,7 @@ function App() {
           </AnimatePresence>
         </div>
       )}
-
+      {updateUser && <UserModal />}
       <AnimatePresence>
         {showCancelDialog && (
           <ConfirmModal

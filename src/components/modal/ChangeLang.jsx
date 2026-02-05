@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useLanguage } from "../../context/LanguageContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaGlobe } from "react-icons/fa";
+import { MdAdminPanelSettings } from "react-icons/md";
+import { useInfoContext } from "../../context/infoContext";
 
 const LANGS = [
   { code: "uz", label: "UZ" },
@@ -10,6 +12,7 @@ const LANGS = [
 ];
 
 const ChangeLang = () => {
+  const { currentUser, setCurrentScreen } = useInfoContext();
   const { lang, changeLanguage } = useLanguage();
   const [open, setOpen] = useState(false);
 
@@ -26,16 +29,16 @@ const ChangeLang = () => {
           type: "spring",
           stiffness: 500,
           damping: 30,
-          mass: 0.8
+          mass: 0.8,
         }}
-        style={{ borderRadius: 24 }}
       >
         {/* Toggle Button (Active Language) */}
         <motion.button
           layout="position"
           onClick={() => setOpen(!open)}
-          className={`relative z-10 flex items-center justify-center w-10 h-10 rounded-full font-black text-xs tracking-wider transition-colors shrink-0 ${open ? "bg-white/10 text-white" : "bg-transparent text-[#f2b90d]"
-            }`}
+          className={`relative z-10 flex items-center justify-center w-10 h-10 rounded-full font-black text-xs tracking-wider transition-colors shrink-0 ${
+            open ? "bg-white/10 text-white" : "bg-transparent text-[#f2b90d]"
+          }`}
           whileTap={{ scale: 0.9 }}
         >
           {open ? <FaGlobe className="text-lg" /> : currentLang.label}
@@ -48,10 +51,15 @@ const ChangeLang = () => {
               initial={{ opacity: 0, width: 0 }}
               animate={{ opacity: 1, width: "auto" }}
               exit={{ opacity: 0, width: 0 }}
-              transition={{
-                width: { type: "spring", stiffness: 500, damping: 30, mass: 0.8 },
-                opacity: { duration: 0.2 }
-              }}
+              // transition={{
+              //   width: {
+              //     type: "spring",
+              //     stiffness: 500,
+              //     damping: 30,
+              //     mass: 0.8,
+              //   },
+              //   opacity: { duration: 0.1 },
+              // }}
               className="flex items-center gap-1 overflow-hidden"
             >
               {[currentLang, ...otherLangs].map((l) => (
@@ -65,14 +73,30 @@ const ChangeLang = () => {
                     changeLanguage(l.code);
                     setOpen(false);
                   }}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold transition-all shrink-0 ${l.code === lang
-                    ? "bg-[#f2b90d] text-black shadow-[0_2px_10px_rgba(242,185,13,0.3)]"
-                    : "hover:bg-white/10 text-white/70 hover:text-white"
-                    }`}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold transition-all shrink-0 ${
+                    l.code === lang
+                      ? "bg-[#f2b90d] text-black shadow-[0_2px_10px_rgba(242,185,13,0.3)]"
+                      : "hover:bg-white/10 text-white/70 hover:text-white"
+                  }`}
                 >
                   {l.label}
                 </motion.button>
               ))}
+              {currentUser?.is_admin && (
+                <motion.button
+                  layout="position"
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.8, opacity: 0 }}
+                  onClick={() => {
+                    setOpen(false);
+                    setCurrentScreen("ADMIN");
+                  }}
+                  className={`relative z-10 flex items-center justify-center w-10 h-10 rounded-full font-black text-xs tracking-wider transition-colors shrink-0 bg-white/10 text-white`}
+                >
+                  <MdAdminPanelSettings className="text-2xl text-white" />
+                </motion.button>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

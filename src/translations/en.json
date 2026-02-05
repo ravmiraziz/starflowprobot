@@ -1,40 +1,69 @@
 {
+  "tabs": {
+    "stars": "Stars",
+    "premium": "Premium"
+  },
   "home": {
+    "canceled": "Cancelled",
     "purchaseStars": "Purchase Stars",
     "subtitle": "Add premium currency to your account",
-
     "telegramUsername": "Telegram username",
     "myUsername": "MY",
-
     "starsAmount": "Stars amount",
     "starsLimit": "Min: 50 | Max: 10,000",
-
     "stars": "STARS",
-
     "paymentAmount": "Payment amount",
     "cashback": "Cashback",
-
     "buy": "Buy now",
-
     "premiumSupport": "Premium Support",
     "premiumSupportDesc": "Our premium support is available 24/7 for secure transactions.",
-
-    "secureFooter": "Secure payment powered by Telegram Stars Engine"
+    "secureFooter": "Secure payment powered by Telegram Stars Engine",
+    "useCashback": "Use cashback",
+    "usedCashbackInfo": "− {{amount}} UZS used from cashback",
+    "minStarsError": "Minimum stars amount: 50",
+    "enterUsername": "Enter username"
+  },
+  "premium": {
+    "title": "Telegram Premium",
+    "subtitle": "Unlock all features",
+    "selectPlan": "Select subscription period",
+    "plans": {
+      "12": {
+        "title": "12 months",
+        "subtitle": "Annual subscription",
+        "badge": "Best value -40%"
+      },
+      "6": {
+        "title": "6 months",
+        "subtitle": "Half-year subscription"
+      },
+      "3": {
+        "title": "3 months",
+        "subtitle": "Quarterly subscription"
+      }
+    }
+  },
+  "transactions": {
+    "title": "Transaction History",
+    "status": {
+      "success": "Success",
+      "pending": "Pending...",
+      "canceled": "Canceled"
+    },
+    "all": "All",
+    "noHistory": "No history available",
+    "premiumLabel": "Premium {{amount}} Mo",
+    "starsLabel": "{{amount}} Stars"
   },
   "payment": {
     "title": "Payment Details",
-
     "virtualCard": "Virtual Card",
     "cardDetails": "Card Details",
-
     "cardNumber": "Card Number",
     "cardOwner": "Card Holder",
-
     "paymentWarning": "You must send the exact payment amount shown, otherwise verification may fail. Please be careful!",
-
     "cashback": "Cashback",
     "statusActive": "Active",
-
     "verifyPayment": "Verify Payment",
     "cancel": "Cancel"
   },
@@ -55,5 +84,27 @@
     "networkError": "Internet connection lost",
     "retry": "Retry",
     "cancel": "Cancel"
+  },
+  "admin": {
+    "tabs": {
+      "stat": "Statistics",
+      "users": "Users",
+      "info": "Info"
+    },
+    "stats": {
+      "revenue": "Total Revenue",
+      "users": "Users",
+      "registered": "Total Registered",
+      "orderStatus": "Order Status",
+      "pending": "Pending",
+      "success": "Success",
+      "cashback": "Cashback",
+      "canceled": "Canceled",
+      "history": "Sales History (Recent Days)",
+      "topProducts": "Top Products & Services",
+      "sales": "{{count}} sales",
+      "popular": "Popular",
+      "topProduct": "Top Product"
+    }
   }
 }

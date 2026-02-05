@@ -2,9 +2,11 @@ import { RiSignalWifiErrorFill } from "react-icons/ri";
 import { MdClose, MdStar } from "react-icons/md";
 import { useLanguage } from "../../context/LanguageContext";
 import { motion } from "framer-motion";
+import { useInfoContext } from "../../context/infoContext";
 
-const Error = ({ onRetry, onCancel }) => {
+const Error = ({ onCancel }) => {
   const { t } = useLanguage();
+  const { setCurrentScreen } = useInfoContext();
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -104,7 +106,7 @@ const Error = ({ onRetry, onCancel }) => {
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.95 }}
-          onClick={onRetry}
+          onClick={() => setCurrentScreen("PAYMENT")}
           className="w-full h-16 rounded-3xl bg-gradient-to-r from-[#ff4d4d] via-[#ff6666] to-[#ff4d4d] text-white font-black text-lg uppercase tracking-widest shadow-[0_10px_40px_rgba(255,77,77,0.3)] flex items-center justify-center relative overflow-hidden group"
         >
           <span className="relative z-10">{t("error.retry")}</span>

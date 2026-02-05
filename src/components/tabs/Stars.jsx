@@ -4,24 +4,74 @@ import { useInfoContext } from "../../context/infoContext";
 import { useLanguage } from "../../context/LanguageContext";
 import Tranactions from "../../pages/Tranactions";
 import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { post } from "../../api/api";
 
 const Stars = ({
   amount,
+  price,
   setAmount,
   username,
   setUsername,
-  onPurchase,
-  finalPrice,
-  usedCashback,
-  setUseCashback,
-  useCashback,
+  setPrice,
+  setCashback,
+  setPendingData,
 }) => {
   const { t } = useLanguage();
-  const { currentUser, formatNumber } = useInfoContext();
+  const { currentUser, formatNumber, setCurrentScreen, setToast, getData } =
+    useInfoContext();
   const options = [100, 250, 300, 500];
-
+  const [useCashback, setUseCashback] = useState(false);
+  const [loading, setLoading] = useState(false);
   const handleMyUsernameClick = () => {
     setUsername(currentUser?.username);
+  };
+
+  const usedCashback = useCashback
+    ? Math.min(price, currentUser?.cashback_balans || 0)
+    : 0;
+  const finalPrice = Math.max(price - usedCashback, 0);
+
+  const handlePurchase = async () => {
+    if (!username) {
+      setToast({
+        isVisible: true,
+        message: t("home.enterUsername"),
+        type: "info",
+      });
+      return;
+    }
+    if (amount < 50) {
+      setToast({
+        isVisible: true,
+        message: t("home.minStarsError"),
+        type: "info",
+      });
+      return;
+    }
+    try {
+      setLoading(true);
+      const { data } = await post("purchase", {
+        amount,
+        cashback_balans_uzs: useCashback ? currentUser.cashback_balans : 0,
+        cashback_want_use_uzs: useCashback ? currentUser.cashback_balans : 0,
+        is_premium: false,
+        is_stars: true,
+        price_uzs: price,
+        user_id: currentUser.id,
+        username: currentUser.username,
+      });
+      if (data) {
+        setPrice(data.price_uzs);
+        setCashback(data.cashback_balans_uzs);
+        await getData("purchase");
+        setCurrentScreen("PAYMENT");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -52,7 +102,7 @@ const Stars = ({
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="glass-card rounded-[32px] p-6 mb-8 border border-white/10 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] bg-white/5 backdrop-blur-2xl relative overflow-hidden gpu-accelerated"
+          className="glass-card rounded-4xl p-6 mb-8 border border-white/10 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] bg-white/5 backdrop-blur-2xl relative overflow-hidden gpu-accelerated"
           style={{ willChange: "transform, opacity" }}
         >
           {/* Decorative gradients - optimized for mobile */}
@@ -161,7 +211,9 @@ const Stars = ({
                     exit={{ opacity: 0, height: 0 }}
                     className="text-[11px] text-green-400 mt-1 font-medium"
                   >
-                    − {formatNumber(usedCashback)} UZS keshbekdan ishlatildi
+                    {t("home.usedCashbackInfo", {
+                      amount: formatNumber(usedCashback),
+                    })}
                   </motion.p>
                 )}
               </AnimatePresence>
@@ -179,7 +231,7 @@ const Stars = ({
             </div>
           </div>
 
-          {currentUser?.cashback > 1000 && (
+          {currentUser?.cashback_balans > 1000 && (
             <motion.div
               className="flex items-center gap-3 px-2 mt-4 relative z-10"
               whileTap={{ scale: 0.98 }}
@@ -198,7 +250,7 @@ const Stars = ({
                 htmlFor="cashback"
                 className="text-sm text-slate-400 cursor-pointer select-none font-medium"
               >
-                Keshbekdan foydalanish
+                {t("home.useCashback")}
               </label>
             </motion.div>
           )}
@@ -206,16 +258,19 @@ const Stars = ({
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.95 }}
-            onClick={onPurchase}
-            className="w-full h-16 mt-8 rounded-2xl bg-gradient-to-r from-[#f2b90d] via-[#ffd04d] to-[#f2b90d] text-black font-black text-xl uppercase tracking-widest shadow-[0_4px_30px_rgba(242,185,13,0.4)] active:shadow-[0_2px_15px_rgba(242,185,13,0.4)] transition-all flex items-center justify-center gap-3 relative overflow-hidden group"
+            onClick={handlePurchase}
+            disabled={loading}
+            className={`w-full h-16 mt-8 rounded-2xl bg-gradient-to-r from-[#f2b90d] via-[#ffd04d] to-[#f2b90d] text-black font-black text-xl uppercase tracking-widest shadow-[0_4px_30px_rgba(242,185,13,0.4)] active:shadow-[0_2px_15px_rgba(242,185,13,0.4)] transition-all flex items-center justify-center gap-3 relative overflow-hidden group ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
           >
             <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 rounded-2xl" />
-            <MdShoppingCart className="font-black text-2xl relative z-10" />
-            <span className="relative z-10">{t("home.buy")}</span>
+            <MdShoppingCart
+              className={`font-black text-2xl relative z-10 ${loading && "animate-pulse"}`}
+            />
+            {!loading && <span className="relative z-10">{t("home.buy")}</span>}
           </motion.button>
         </motion.div>
 
-        <Tranactions />
+        <Tranactions setPendingData={setPendingData} />
       </div>
     </div>
   );

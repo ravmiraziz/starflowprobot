@@ -1,40 +1,69 @@
 {
+  "tabs": {
+    "stars": "Stars",
+    "premium": "Premium"
+  },
   "home": {
+    "canceled": "Отменено",
     "purchaseStars": "Покупка Stars",
     "subtitle": "Пополните свой аккаунт премиальной валютой",
-
     "telegramUsername": "Имя пользователя Telegram",
     "myUsername": "МОЙ",
-
     "starsAmount": "Количество stars",
     "starsLimit": "Мин: 50 | Макс: 10 000",
-
     "stars": "STARS",
-
     "paymentAmount": "Сумма оплаты",
-    "cashback": "Кэшбэк ",
-
+    "cashback": "Кэшбэк",
     "buy": "Купить",
-
     "premiumSupport": "Премиум поддержка",
     "premiumSupportDesc": "Наша премиум поддержка доступна 24/7 для безопасных транзакций.",
-
-    "secureFooter": "Безопасный платёж на базе Telegram Stars Engine"
+    "secureFooter": "Безопасный платёж на базе Telegram Stars Engine",
+    "useCashback": "Использовать кэшбэк",
+    "usedCashbackInfo": "− {{amount}} UZS использовано из кэшбэка",
+    "minStarsError": "Минимальное количество stars: 50",
+    "enterUsername": "Введите имя пользователя"
+  },
+  "premium": {
+    "title": "Telegram Premium",
+    "subtitle": "Разблокируйте все возможности",
+    "selectPlan": "Выберите период подписки",
+    "plans": {
+      "12": {
+        "title": "12 месяцев",
+        "subtitle": "Годовая подписка",
+        "badge": "Выгодно -40%"
+      },
+      "6": {
+        "title": "6 месяцев",
+        "subtitle": "Полгода"
+      },
+      "3": {
+        "title": "3 месяца",
+        "subtitle": "Квартальная подписка"
+      }
+    }
+  },
+  "transactions": {
+    "title": "История транзакций",
+    "status": {
+      "success": "Успешно",
+      "pending": "В процессе...",
+      "canceled": "Отменено"
+    },
+    "all": "Все",
+    "noHistory": "История отсутствует",
+    "premiumLabel": "Premium {{amount}} мес",
+    "starsLabel": "{{amount}} Stars"
   },
   "payment": {
     "title": "Данные платежа",
-
     "virtualCard": "Виртуальная карта",
     "cardDetails": "Данные карты",
-
     "cardNumber": "Номер карты",
     "cardOwner": "Владелец карты",
-
     "paymentWarning": "Необходимо отправить точную сумму платежа, иначе проверка может не пройти. Будьте внимательны!",
-
     "cashback": "Кэшбэк",
     "statusActive": "Активно",
-
     "verifyPayment": "Проверить платёж",
     "cancel": "Отмена"
   },
@@ -55,5 +84,27 @@
     "networkError": "Соединение с интернетом потеряно",
     "retry": "Повторить попытку",
     "cancel": "Отмена"
+  },
+  "admin": {
+    "tabs": {
+      "stat": "Статистика",
+      "users": "Пользователи",
+      "info": "Информация"
+    },
+    "stats": {
+      "revenue": "Общий доход",
+      "users": "Пользователи",
+      "registered": "Всего зарегистрировано",
+      "orderStatus": "Статус заказов",
+      "pending": "В процессе",
+      "success": "Успешно",
+      "cashback": "Кэшбэк",
+      "canceled": "Отменено",
+      "history": "История продаж (последние дни)",
+      "topProducts": "Топ товары и услуги",
+      "sales": "{{count}} продаж",
+      "popular": "Популярно",
+      "topProduct": "Топ товар"
+    }
   }
 }

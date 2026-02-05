@@ -1,10 +1,10 @@
 import { MdRssFeed } from "react-icons/md";
 import { GrCopy } from "react-icons/gr";
-import { FaInfoCircle } from "react-icons/fa";
+import { FaInfoCircle, FaPhoneSquare } from "react-icons/fa";
 import { FaArrowUpRightDots } from "react-icons/fa6";
 import { useLanguage } from "../../context/LanguageContext";
 import { useInfoContext } from "../../context/infoContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 const formatCardNumber = (number) => {
@@ -12,12 +12,22 @@ const formatCardNumber = (number) => {
   return number.replace(/(.{4})/g, "$1 ").trim();
 };
 
-const PaymentModal = ({ onClose, onVerify, price, cashback }) => {
+const PaymentModal = ({ data, onClose, price, cashback }) => {
   const { t } = useLanguage();
-  const { formatNumber, setToast } = useInfoContext();
+  const { currentUser, formatNumber, setToast, setCurrentScreen } =
+    useInfoContext();
+
+  const [displayPrice, setDisplayPrice] = useState(price);
+  const [displayCashback, setDisplayCashback] = useState(cashback);
+
+  useEffect(() => {
+    if (data) {
+      setDisplayPrice(data.price_uzs);
+      setDisplayCashback(data.cashback_balans_uzs);
+    }
+  }, [data]);
 
   const copyToClipboard = async (value) => {
-    console.log(value);
     try {
       const cleanValue =
         typeof value === "number" ? value.toString() : value.replace(/\s/g, "");
@@ -38,13 +48,13 @@ const PaymentModal = ({ onClose, onVerify, price, cashback }) => {
     }
   };
 
-  const [cardData, setCardData] = useState({
-    cardNumber: "5614682110787878",
-    owner: "RAVSHANOV MIRAZIZ",
-    price: 120000,
-    cashback: 6000,
-    cardType: "UZCARD",
-  });
+  const cardData = {
+    cardNumber: currentUser?.utility?.card_number,
+    owner: currentUser?.utility?.owner_name,
+    phone: currentUser?.utility?.phone_number,
+    price: displayPrice,
+    cashback: displayCashback,
+  };
   const [loading, setLoading] = useState(false);
 
   // Consider adding fetch logic here if needed, keeping mock for now as per previous code
@@ -83,12 +93,12 @@ const PaymentModal = ({ onClose, onVerify, price, cashback }) => {
             transition={{ delay: 0.1 }}
             className="text-4xl flex items-center justify-center gap-3 font-black tracking-tight"
           >
-            {formatNumber(price)}{" "}
+            {formatNumber(displayPrice)}{" "}
             <span className="text-xl opacity-50">UZS</span>
             <motion.button
               whileTap={{ scale: 0.9 }}
               type="button"
-              onClick={() => copyToClipboard(price)}
+              onClick={() => copyToClipboard(displayPrice)}
               className="text-black text-lg p-2 rounded-xl bg-[#f2b90d] hover:bg-[#ffe066] transition-colors"
             >
               <GrCopy />
@@ -125,7 +135,11 @@ const PaymentModal = ({ onClose, onVerify, price, cashback }) => {
 
                 <div className="h-8 opacity-80 backdrop-blur-md rounded-lg overflow-hidden grayscale group-hover:grayscale-0 transition-all">
                   <img
-                    src={`/${cardData.cardType.toLowerCase()}.jpg`}
+                    src={
+                      currentUser?.utility?.card_number?.slice(0, 4) === "9860"
+                        ? "/humo.png"
+                        : `/uzcard.jpg`
+                    }
                     alt="card"
                     className="h-full w-auto object-contain"
                   />
@@ -167,13 +181,23 @@ const PaymentModal = ({ onClose, onVerify, price, cashback }) => {
         )}
 
         <div className="space-y-3">
-          <div className="flex justify-between items-center p-3 text-xs bg-blue-500/10 border border-blue-500/20 rounded-2xl">
-            <div className="flex items-center gap-3">
-              <FaInfoCircle className="text-4xl text-blue-400" />
-              <span className="text-blue-100/80 font-medium">
-                {t("payment.paymentWarning")}
-              </span>
+          <div className="flex justify-between items-center py-1 px-1">
+            <div className="flex flex-col">
+              <p className="text-white/40 text-[10px] font-bold uppercase mb-1">
+                Telefon raqami
+              </p>
+              <div className="flex items-center gap-2 text-[#f2b90d]">
+                <FaPhoneSquare className="text-2xl font-bold" />
+                <p className="font-black text-lg">{cardData.phone}</p>
+              </div>
             </div>
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={() => copyToClipboard(cardData.phone)}
+              className="bg-[#f2b90d] text-black size-9 z-10 flex items-center justify-center rounded-xl shadow-lg shadow-orange-500/20"
+            >
+              <GrCopy className="text-sm" />
+            </motion.button>
           </div>
           <div className="flex justify-between items-center py-1 px-1">
             <div className="flex flex-col">
@@ -183,7 +207,7 @@ const PaymentModal = ({ onClose, onVerify, price, cashback }) => {
               <div className="flex items-center gap-2 text-[#f2b90d]">
                 <FaArrowUpRightDots className="text-lg font-bold" />
                 <p className="font-black text-lg">
-                  +{formatNumber(cashback)} UZS
+                  +{formatNumber(displayCashback)} UZS
                 </p>
               </div>
             </div>
@@ -191,13 +215,21 @@ const PaymentModal = ({ onClose, onVerify, price, cashback }) => {
               {t("payment.statusActive")}
             </span>
           </div>
+          <div className="flex justify-between items-center p-3 text-xs bg-blue-500/10 border border-blue-500/20 rounded-2xl">
+            <div className="flex items-center gap-3">
+              <FaInfoCircle className="text-4xl text-blue-400" />
+              <span className="text-blue-100/80 font-medium">
+                {t("payment.paymentWarning")}
+              </span>
+            </div>
+          </div>
         </div>
 
-        <div className="flex flex-col items-center gap-3 mt-2">
+        <div className="flex flex-col items-center gap-3">
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.95 }}
-            onClick={onVerify}
+            onClick={() => setCurrentScreen("SUCCESS")}
             className="w-full h-16 rounded-2xl bg-gradient-to-r from-[#f2b90d] via-[#ffd04d] to-[#f2b90d] text-black font-black text-xl uppercase tracking-widest shadow-[0_4px_25px_rgba(242,185,13,0.4)] relative overflow-hidden flex items-center justify-center"
           >
             {t("payment.verifyPayment")}

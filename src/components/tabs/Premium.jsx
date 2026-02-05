@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   MdBolt,
   MdCalendarMonth,
   MdEvent,
+  MdOutlineSecurity,
   MdSchedule,
   MdVerified,
 } from "react-icons/md";
@@ -11,58 +12,98 @@ import { useInfoContext } from "../../context/infoContext";
 import { useLanguage } from "../../context/LanguageContext";
 import Tranactions from "../../pages/Tranactions";
 import { motion, AnimatePresence } from "framer-motion";
+import { post } from "../../api/api";
 
-const PLANS = [
-  {
+const PLAN_META = {
+  12: {
     id: "12",
-    months: 12,
-    price: 450000,
-    title: "12 oy",
-    subtitle: "Yillik obuna",
     icon: <MdCalendarMonth />,
     highlight: true,
-    badge: "Eng foydali -40%",
   },
-  {
+  6: {
     id: "6",
-    months: 6,
-    price: 280000,
-    title: "6 oy",
-    subtitle: "Yarim yillik",
     icon: <MdEvent />,
   },
-  {
+  3: {
     id: "3",
-    months: 3,
-    price: 165000,
-    title: "3 oy",
-    subtitle: "Kvartal obunasi",
     icon: <MdSchedule />,
   },
-];
+};
 
-const Premium = ({ username, setUsername, onPurchase }) => {
+const Premium = ({
+  username,
+  setUsername,
+  setPrice,
+  setCashback,
+  setPendingData,
+}) => {
   const { t } = useLanguage();
-  const { currentUser, formatNumber, setToast } = useInfoContext();
+  const { currentUser, formatNumber, setToast, setCurrentScreen } =
+    useInfoContext();
+  const [loading, setLoading] = useState(false);
+  const PLANS = useMemo(() => {
+    return (currentUser?.premium_prices || [])
+      .map((item) => {
+        const meta = PLAN_META[item.month];
+        if (!meta) return null;
 
-  const [selectedPlan, setSelectedPlan] = useState(PLANS[0]);
+        return {
+          ...meta,
+          months: item.month,
+          price: item.price,
+          title: t(`premium.plans.${item.month}.title`),
+          subtitle: t(`premium.plans.${item.month}.subtitle`),
+          badge:
+            t(`premium.plans.${item.month}.badge`) ===
+            `premium.plans.${item.month}.badge`
+              ? null
+              : t(`premium.plans.${item.month}.badge`),
+        };
+      })
+      .filter(Boolean)
+      .sort((a, b) => b.months - a.months);
+  }, [currentUser?.premium_prices, t]);
 
-  const handleBuy = () => {
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [useCashback, setUseCashback] = useState(false);
+
+  useEffect(() => {
+    if (PLANS.length && !selectedPlan) {
+      setSelectedPlan(PLANS[0]);
+    }
+  }, [PLANS, selectedPlan]);
+
+  const handlePurchase = async () => {
     if (!username) {
       setToast({
         isVisible: true,
-        message: "Username kiriting",
+        message: t("home.enterUsername"),
         type: "info",
       });
       return;
     }
-
-    onPurchase({
-      type: "PREMIUM",
-      username,
-      months: selectedPlan.months,
-      price: selectedPlan.price,
-    });
+    try {
+      setLoading(true);
+      const { data } = await post("purchase", {
+        amount: selectedPlan.months,
+        cashback_balans_uzs: useCashback ? currentUser.cashback_balans : 0,
+        cashback_want_use_uzs: useCashback ? currentUser.cashback_balans : 0,
+        is_premium: true,
+        is_stars: false,
+        price_uzs: selectedPlan.price,
+        user_id: currentUser.id,
+        username: currentUser.username,
+      });
+      if (data) {
+        setPrice(data.price_uzs);
+        setCashback(data.cashback_balans_uzs);
+        setCurrentScreen("PAYMENT");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleMyUsernameClick = () => {
@@ -93,10 +134,10 @@ const Premium = ({ username, setUsername, onPurchase }) => {
             <MdVerified className="text-[#f2b90d] text-6xl drop-shadow-[0_0_15px_rgba(242,185,13,0.5)]" />
           </motion.div>
           <h1 className="text-3xl font-extrabold mb-2 tracking-tight">
-            Telegram Premium
+            {t("premium.title")}
           </h1>
           <p className="text-white/50 text-sm font-medium">
-            Barcha imkoniyatlarni oching
+            {t("premium.subtitle")}
           </p>
         </motion.div>
 
@@ -148,12 +189,12 @@ const Premium = ({ username, setUsername, onPurchase }) => {
           {/* PLANS */}
           <div className="space-y-4 relative z-10 mb-8">
             <label className="block text-white/50 text-xs font-bold uppercase tracking-widest mb-2 pl-1">
-              Obuna muddatini tanlang
+              {t("premium.selectPlan")}
             </label>
 
             <div className="flex flex-col gap-3">
               {PLANS.map((plan) => {
-                const active = selectedPlan.id === plan.id;
+                const active = selectedPlan?.id === plan.id;
 
                 return (
                   <motion.div
@@ -234,21 +275,46 @@ const Premium = ({ username, setUsername, onPurchase }) => {
                 );
               })}
             </div>
+            {currentUser?.cashback_balans > 1000 && (
+              <motion.div
+                className="flex items-center gap-3 px-2 mt-4 relative z-10"
+                whileTap={{ scale: 0.98 }}
+              >
+                <div className="relative flex items-center">
+                  <input
+                    id="cashback"
+                    type="checkbox"
+                    checked={useCashback}
+                    onChange={(e) => setUseCashback(e.target.checked)}
+                    className="peer appearance-none w-5 h-5 border-2 border-white/20 rounded-md checked:bg-[#f2b90d] checked:border-[#f2b90d] transition-all cursor-pointer"
+                  />
+                  <MdOutlineSecurity className="absolute text-black text-xs opacity-0 peer-checked:opacity-100 pointer-events-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+                </div>
+                <label
+                  htmlFor="cashback"
+                  className="text-sm text-slate-400 cursor-pointer select-none font-medium"
+                >
+                  {t("home.useCashback")}
+                </label>
+              </motion.div>
+            )}
           </div>
-
           <motion.button
-            onClick={handleBuy}
+            onClick={handlePurchase}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.95 }}
-            className="w-full h-16 rounded-2xl bg-gradient-to-r from-[#f2b90d] via-[#ffd04d] to-[#f2b90d] text-black font-black text-xl uppercase tracking-widest shadow-[0_4px_30px_rgba(242,185,13,0.4)] relative overflow-hidden group flex items-center justify-center gap-3 z-10"
+            disabled={loading}
+            className={`w-full h-16 rounded-2xl bg-gradient-to-r from-[#f2b90d] via-[#ffd04d] to-[#f2b90d] text-black font-black text-xl uppercase tracking-widest shadow-[0_4px_30px_rgba(242,185,13,0.4)] relative overflow-hidden group flex items-center justify-center gap-3 z-10 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
           >
             <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 rounded-2xl" />
-            <MdBolt className="text-2xl relative z-10" />
-            <span className="relative z-10">{t("home.buy")}</span>
+            <MdBolt
+              className={`text-2xl relative z-10 ${loading && "animate-pulse"}`}
+            />
+            {!loading && <span className="relative z-10">{t("home.buy")}</span>}
           </motion.button>
         </motion.div>
 
-        <Tranactions />
+        <Tranactions setPendingData={setPendingData} />
       </div>
     </div>
   );

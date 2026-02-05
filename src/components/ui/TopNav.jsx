@@ -31,7 +31,7 @@ const TopNav = () => {
               <FaWallet className="text-[#f2b90d] text-[16px]" />
             </div>
             <p className="text-white/90 text-sm font-bold tracking-tight pr-1 font-mono">
-              {formatNumber(currentUser?.cashback || 0)}{" "}
+              {formatNumber(currentUser?.cashback_balans || 0)}{" "}
               <span className="text-[#f2b90d]">UZS</span>
             </p>
           </div>

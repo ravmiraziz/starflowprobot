@@ -2,14 +2,15 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_SERVER_URL;
 
+
 const api = axios.create({
   baseURL: API_URL,
   headers: { "Content-Type": "application/json" },
 });
 
 api.interceptors.request.use((config) => {
-  const token = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
-  if (token) config.headers.Authorization = `${token}`;
+  // const token = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
+  // if (token) config.headers.Authorization = `${token}`;
   return config;
 });
 

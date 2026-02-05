@@ -1,40 +1,69 @@
 {
+  "tabs": {
+    "stars": "Stars",
+    "premium": "Premium"
+  },
   "home": {
+    "canceled": "Bekor qilindi",
     "purchaseStars": "Stars sotib olish",
     "subtitle": "Hisobingizga premium valyuta qo‘shing",
-
     "telegramUsername": "Telegram foydalanuvchi nomi",
     "myUsername": "MENIKI",
-
     "starsAmount": "Stars miqdori",
     "starsLimit": "Min: 50 | Max: 10 000",
-
     "stars": "STARS",
-
     "paymentAmount": "To‘lov miqdori",
     "cashback": "Kechbek",
-
     "buy": "Sotib olish",
-
     "premiumSupport": "Premium qo‘llab-quvvatlash",
     "premiumSupportDesc": "Bizning premium qo‘llab-quvvatlash xizmati 24/7 xavfsiz to‘lovlar uchun mavjud.",
-
-    "secureFooter": "Telegram Stars Engine tomonidan himoyalangan to‘lov"
+    "secureFooter": "Telegram Stars Engine tomonidan himoyalangan to‘lov",
+    "useCashback": "Keshbekdan foydalanish",
+    "usedCashbackInfo": "− {{amount}} UZS keshbekdan ishlatildi",
+    "minStarsError": "Minimal stars soni: 50",
+    "enterUsername": "Username kiriting"
+  },
+  "premium": {
+    "title": "Telegram Premium",
+    "subtitle": "Barcha imkoniyatlarni oching",
+    "selectPlan": "Obuna muddatini tanlang",
+    "plans": {
+      "12": {
+        "title": "12 oy",
+        "subtitle": "Yillik obuna",
+        "badge": "Eng foydali -40%"
+      },
+      "6": {
+        "title": "6 oy",
+        "subtitle": "Yarim yillik"
+      },
+      "3": {
+        "title": "3 oy",
+        "subtitle": "Kvartal obunasi"
+      }
+    }
+  },
+  "transactions": {
+    "title": "Tranzaksiyalar tarixi",
+    "status": {
+      "success": "Muvaffaqiyatli",
+      "pending": "Jarayonda...",
+      "canceled": "Bekor qilingan"
+    },
+    "all": "Hammasi",
+    "noHistory": "Tarix mavjud emas",
+    "premiumLabel": "Premium {{amount}} Oy",
+    "starsLabel": "{{amount}} Stars"
   },
   "payment": {
     "title": "To'lov ma'lumotlari",
-
     "virtualCard": "Virtual karta",
     "cardDetails": "Karta ma'lumotlari",
-
     "cardNumber": "Karta raqami",
     "cardOwner": "Karta egasi",
-
     "paymentWarning": "To'lov so'mmasini ko'rsatilgan qiymatda yuborishingiz kerak, aks holda tekshiruvdan o'tmasligi mumkin. E'tiborli bo'ling!",
-
     "cashback": "Keshbek",
     "statusActive": "Faol",
-
     "verifyPayment": "To'lovni tekshirish",
     "cancel": "Bekor qilish"
   },
@@ -55,5 +84,27 @@
     "networkError": "Internet bilan aloqa uzildi",
     "retry": "Qayta urinish",
     "cancel": "Bekor qilish"
+  },
+  "admin": {
+    "tabs": {
+      "stat": "Statistika",
+      "users": "Foydalanuvchilar",
+      "info": "Ma'lumot"
+    },
+    "stats": {
+      "revenue": "Umumiy Tushum",
+      "users": "Foydalanuvchilar",
+      "registered": "Jami ro'yxatdan o'tgan",
+      "orderStatus": "Buyurtmalar Holati",
+      "pending": "Jarayonda",
+      "success": "Muvaffaqiyatli",
+      "cashback": "Keshbek",
+      "canceled": "Bekor qilingan",
+      "history": "Savdo Tarixi (Oxirgi kunlar)",
+      "topProducts": "Top Mahsulotlar & Xizmatlar",
+      "sales": "{{count}} ta sotuv",
+      "popular": "Popular",
+      "topProduct": "Top Product"
+    }
   }
 }
