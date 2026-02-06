@@ -6,7 +6,6 @@ import {
   MdTrendingUp,
   MdFiberNew,
   MdCheckCircle,
-  MdLocalShipping,
   MdCancel,
   MdStar,
   MdVerified,
@@ -14,7 +13,7 @@ import {
 } from "react-icons/md";
 
 const Statistics = () => {
-  const { stats } = useAdminContext();
+  const { stats, totalPurchase } = useAdminContext();
   const { formatNumber } = useInfoContext();
   const { t } = useLanguage();
 
@@ -63,6 +62,16 @@ const Statistics = () => {
             </span>
           </div>
         </div>
+        <div className="glass-card p-4 rounded-2xl flex flex-col gap-1">
+          <p className="text-white/40 text-[10px] uppercase font-black tracking-[0.1em]">
+            Tranzaksiyalar
+          </p>
+          <div className="flex items-baseline gap-2">
+            <span className="text-xl font-black text-white">
+              {formatNumber(totalPurchase || 0)}
+            </span>
+          </div>
+        </div>
       </div>
 
       <div className="mb-8">
@@ -76,7 +85,7 @@ const Statistics = () => {
                 {t("transactions.status.pending")}
               </p>
               <p className="text-lg font-black">
-                {mainStats.pending_transactions || 0}
+                {formatNumber(mainStats.pending_transactions) || 0}
               </p>
             </div>
             <div className="size-8 rounded-full bg-blue-500/10 flex items-center justify-center">
@@ -89,7 +98,7 @@ const Statistics = () => {
                 {t("transactions.status.success")}
               </p>
               <p className="text-lg font-black">
-                {mainStats.success_transactions || 0}
+                {formatNumber(mainStats.success_transactions) || 0}
               </p>
             </div>
             <div className="size-8 rounded-full bg-green-500/10 flex items-center justify-center">
@@ -102,7 +111,7 @@ const Statistics = () => {
                 {t("admin.stats.cashback")}
               </p>
               <p className="text-lg font-black">
-                {mainStats.total_cashback_earned || 0}
+                {formatNumber(mainStats.total_cashback_earned) || 0}
               </p>
             </div>
             <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center">
@@ -115,7 +124,7 @@ const Statistics = () => {
                 {t("transactions.status.canceled")}
               </p>
               <p className="text-lg font-black">
-                {mainStats.canceled_transactions || 0}
+                {formatNumber(mainStats.canceled_transactions) || 0}
               </p>
             </div>
             <div className="size-8 rounded-full bg-red-500/10 flex items-center justify-center">
@@ -185,7 +194,7 @@ const Statistics = () => {
             <div key={idx} className="p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="size-10 rounded-xl bg-gradient-to-tr from-cosmic-purple to-cosmic-charcoal flex items-center justify-center border border-white/10">
-                  {product.type === "premium" ? (
+                  {product.type === "stars" ? (
                     <MdVerified className="text-primary text-xl" />
                   ) : (
                     <MdStar className="text-primary text-xl" />
@@ -193,7 +202,7 @@ const Statistics = () => {
                 </div>
                 <div>
                   <p className="text-sm font-bold text-white/90">
-                    {product.type === "premium"
+                    {product.type === "stars"
                       ? t("tabs.premium")
                       : t("tabs.stars")}
                   </p>

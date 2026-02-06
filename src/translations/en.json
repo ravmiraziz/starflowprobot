@@ -65,7 +65,11 @@
     "cashback": "Cashback",
     "statusActive": "Active",
     "verifyPayment": "Verify Payment",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "copied": "Copied",
+    "copyError": "Copy error",
+    "success": "Success",
+    "notPaid": "Not paid!"
   },
   "confirm": {
     "title": "Do you want to cancel the payment?",

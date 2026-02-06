@@ -3,9 +3,11 @@ import ChangeLang from "../modal/ChangeLang";
 import { BiSupport } from "react-icons/bi";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInfoContext } from "../../context/infoContext";
+import { useLanguage } from "../../context/LanguageContext";
 
 const SwipeContainer = ({ activeTab, setActiveTab, children }) => {
   const [startX, setStartX] = useState(null);
+  const { lang } = useLanguage();
   const { currentUser } = useInfoContext();
 
   const onTouchStart = (e) => {
@@ -87,7 +89,7 @@ const SwipeContainer = ({ activeTab, setActiveTab, children }) => {
         >
           <a
             href={
-              currentUser.language === "ru"
+              lang === "ru"
                 ? "https://t.me/+998934905134"
                 : "https://t.me/+998996860307"
             }

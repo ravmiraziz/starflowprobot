@@ -26,7 +26,6 @@ export const AdminProvider = ({ children }) => {
       const premiumRes = await get("premiums");
       const starRes = await get("stars");
       const statRes = await get("dashboard");
-      console.log(statRes);
       setInfo(utilityRes?.data);
       setPremiumInfo(premiumRes?.data?.premium_prices || []);
       setStars(starRes?.data?.star_prices || []);

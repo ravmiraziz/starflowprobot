@@ -36,9 +36,10 @@ const Premium = ({
   setPrice,
   setCashback,
   setPendingData,
+  setTransactionId,
 }) => {
   const { t } = useLanguage();
-  const { currentUser, formatNumber, setToast, setCurrentScreen } =
+  const { currentUser, formatNumber, setToast, setCurrentScreen, getData } =
     useInfoContext();
   const [loading, setLoading] = useState(false);
   const PLANS = useMemo(() => {
@@ -95,8 +96,10 @@ const Premium = ({
         username: currentUser.username,
       });
       if (data) {
+        setTransactionId(data.id);
         setPrice(data.price_uzs);
         setCashback(data.cashback_balans_uzs);
+        getData();
         setCurrentScreen("PAYMENT");
       }
     } catch (error) {
@@ -275,7 +278,7 @@ const Premium = ({
                 );
               })}
             </div>
-            {currentUser?.cashback_balans > 1000 && (
+            {currentUser?.cashback_balans >= 1000 && (
               <motion.div
                 className="flex items-center gap-3 px-2 mt-4 relative z-10"
                 whileTap={{ scale: 0.98 }}

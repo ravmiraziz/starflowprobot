@@ -19,8 +19,14 @@ import { putData } from "./api/api";
 import { useLanguage } from "./context/LanguageContext";
 
 function App() {
-  const { currentUser, currentScreen, setCurrentScreen, loading, setToast } =
-    useInfoContext();
+  const {
+    currentUser,
+    currentScreen,
+    setCurrentScreen,
+    loading,
+    setToast,
+    getData,
+  } = useInfoContext();
   const { updateUser, getData: getAdminData } = useAdminContext();
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState("STARS");
@@ -28,6 +34,7 @@ function App() {
   const [amount, setAmount] = useState(100);
   const [username, setUsername] = useState("");
   const [pendingData, setPendingData] = useState(null);
+  const [transactionId, setTransactionId] = useState("");
   const [price, setPrice] = useState(
     amount * (currentUser?.star_prices[0]?.price || 220),
   ); // Example conversion
@@ -43,18 +50,22 @@ function App() {
     setPrice(amount * (currentUser?.star_prices[0]?.price || 220));
   }, [amount]);
 
-  console.log(price);
-
   const handleConfirmCancel = async () => {
-    await putData("cancel-purchase", { id: currentUser?.id });
-    setPendingData(null);
-    setShowCancelDialog(false);
-    setCurrentScreen("STARS");
-    setToast({
-      isVisible: true,
-      message: t("home.canceled"),
-      type: "success",
-    });
+    try {
+      const res = await putData("cancel-purchase", { id: pendingData?.id });
+
+      setPendingData(null);
+      setShowCancelDialog(false);
+      getData();
+      setCurrentScreen("STARS");
+      setToast({
+        isVisible: true,
+        message: t("home.canceled"),
+        type: "success",
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleClosePayment = () => {
@@ -65,12 +76,12 @@ function App() {
     if (!window.Telegram?.WebApp) return;
     const webApp = window.Telegram.WebApp;
 
-    webApp.ready();
-    if (webApp.requestFullscreen) {
-      webApp.requestFullscreen();
-    } else {
-      webApp.expand();
-    }
+    // webApp.ready();
+    // if (webApp.requestFullscreen) {
+    //   webApp.requestFullscreen();
+    // } else {
+    //   webApp.expand();
+    // }
     webApp.disableVerticalSwipes();
 
     // ✅ Viewport meta tag
@@ -181,6 +192,7 @@ function App() {
                 setPrice={setPrice}
                 setCashback={setCashback}
                 setPendingData={setPendingData}
+                setTransactionId={setTransactionId}
               />
               <Premium
                 key="PREMIUM"
@@ -189,6 +201,7 @@ function App() {
                 setPrice={setPrice}
                 setCashback={setCashback}
                 setPendingData={setPendingData}
+                setTransactionId={setTransactionId}
               />
             </SwipeContainer>
           )}
@@ -196,6 +209,7 @@ function App() {
           <AnimatePresence mode="wait">
             {currentScreen === "PAYMENT" && (
               <PaymentModal
+                transactionId={transactionId}
                 data={pendingData}
                 setData={setPendingData}
                 key="payment-modal"

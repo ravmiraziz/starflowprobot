@@ -20,8 +20,6 @@ const Info = () => {
   const [update, setUpdate] = useState(null);
   const [starPrice, setStarPrice] = useState("");
   const [deleteData, setDeleteData] = useState(null);
-  console.log(deleteData);
-
   useEffect(() => {
     if (info) {
       setCardInfo({

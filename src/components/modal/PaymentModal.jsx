@@ -6,15 +6,17 @@ import { useLanguage } from "../../context/LanguageContext";
 import { useInfoContext } from "../../context/infoContext";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { getOne } from "../../api/api";
+import { GiSandsOfTime } from "react-icons/gi";
 
 const formatCardNumber = (number) => {
   if (!number) return "•••• •••• •••• ••••";
   return number.replace(/(.{4})/g, "$1 ").trim();
 };
 
-const PaymentModal = ({ data, onClose, price, cashback }) => {
+const PaymentModal = ({ transactionId, data, onClose, price, cashback }) => {
   const { t } = useLanguage();
-  const { currentUser, formatNumber, setToast, setCurrentScreen } =
+  const { currentUser, formatNumber, setToast, setCurrentScreen, getData } =
     useInfoContext();
 
   const [displayPrice, setDisplayPrice] = useState(price);
@@ -35,14 +37,14 @@ const PaymentModal = ({ data, onClose, price, cashback }) => {
       await navigator.clipboard.writeText(cleanValue);
       setToast({
         isVisible: true,
-        message: "Muvaffaqiyatli nusxalandi",
+        message: t("payment.copied"),
         type: "success",
       });
     } catch (e) {
       console.error("Copy failed", e);
       setToast({
         isVisible: true,
-        message: "Nusxalashda xatolik",
+        message: t("payment.copyError"),
         type: "error",
       });
     }
@@ -57,7 +59,32 @@ const PaymentModal = ({ data, onClose, price, cashback }) => {
   };
   const [loading, setLoading] = useState(false);
 
-  // Consider adding fetch logic here if needed, keeping mock for now as per previous code
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const { data } = await getOne("purchase", transactionId);
+      if (data.message === "success") {
+        setCurrentScreen("SUCCESS");
+        getData();
+        setToast({
+          isVisible: true,
+          message: t("payment.success"),
+          type: "success",
+        });
+      } else {
+        setToast({
+          isVisible: true,
+          message: t("payment.notPaid"),
+          type: "info",
+        });
+      }
+    } catch (error) {
+      setCurrentScreen("ERROR");
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <motion.div
@@ -227,14 +254,20 @@ const PaymentModal = ({ data, onClose, price, cashback }) => {
 
         <div className="flex flex-col items-center gap-3">
           <motion.button
+            disabled={loading}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => setCurrentScreen("SUCCESS")}
-            className="w-full h-16 rounded-2xl bg-gradient-to-r from-[#f2b90d] via-[#ffd04d] to-[#f2b90d] text-black font-black text-xl uppercase tracking-widest shadow-[0_4px_25px_rgba(242,185,13,0.4)] relative overflow-hidden flex items-center justify-center"
+            onClick={handleSubmit}
+            className={`w-full h-16 rounded-2xl bg-gradient-to-r from-[#f2b90d] via-[#ffd04d] to-[#f2b90d] text-black font-black text-xl uppercase tracking-widest shadow-[0_4px_25px_rgba(242,185,13,0.4)] relative overflow-hidden flex items-center justify-center ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
           >
-            {t("payment.verifyPayment")}
+            {loading ? (
+              <GiSandsOfTime className="text-3xl animate-bounce" />
+            ) : (
+              t("payment.verifyPayment")
+            )}
           </motion.button>
           <motion.button
+            disabled={loading}
             whileTap={{ scale: 0.95 }}
             onClick={onClose}
             className="h-10 rounded-2xl font-bold text-xs uppercase tracking-widest text-white/50 hover:text-white transition-colors"

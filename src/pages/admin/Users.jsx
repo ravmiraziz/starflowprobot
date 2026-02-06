@@ -83,14 +83,14 @@ const Users = () => {
         await putData("cancel-purchase", { id: data.id });
         setToast({
           isVisible: true,
-          message: "Status tasdiqlandi",
+          message: "Status bekor qilindi",
           type: "success",
         });
       } else if (updateStatus.type === "done") {
         await patch(`success-purchase-admin/${data.id}`);
         setToast({
           isVisible: true,
-          message: "Status bekor qilindi",
+          message: "Status tasdiqlandi",
           type: "success",
         });
       }

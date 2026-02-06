@@ -9,11 +9,7 @@ export const LanguageProvider = ({ children }) => {
   const { currentUser } = useInfoContext();
 
   const getInitialLang = () => {
-    return (
-      localStorage.getItem("lang") ||
-      window.Telegram?.WebApp?.initDataUnsafe?.user?.language_code ||
-      "uz"
-    );
+    return localStorage.getItem("lang") || currentUser.language || "uz";
   };
 
   const [lang, setLang] = useState(getInitialLang);

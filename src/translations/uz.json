@@ -65,7 +65,11 @@
     "cashback": "Keshbek",
     "statusActive": "Faol",
     "verifyPayment": "To'lovni tekshirish",
-    "cancel": "Bekor qilish"
+    "cancel": "Bekor qilish",
+    "copied": "Muvaffaqiyatli nusxalandi",
+    "copyError": "Nusxalashda xatolik",
+    "success": "Muvaffaqiyatli xarid",
+    "notPaid": "To'lov qilinmagan!"
   },
   "confirm": {
     "title": "To'lovni bekor qilmoqchimisiz?",

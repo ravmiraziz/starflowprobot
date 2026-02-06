@@ -65,7 +65,11 @@
     "cashback": "Кэшбэк",
     "statusActive": "Активно",
     "verifyPayment": "Проверить платёж",
-    "cancel": "Отмена"
+    "cancel": "Отмена",
+    "copied": "Копировано",
+    "copyError": "Ошибка копирования",
+    "success": "Успешно",
+    "notPaid": "Не оплачено!"
   },
   "confirm": {
     "title": "Вы хотите отменить платёж?",
