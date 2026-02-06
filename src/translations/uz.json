@@ -87,7 +87,8 @@
     "description": "Xatolik yuz berdi, iltimos qaytadan urinib ko'ring",
     "networkError": "Internet bilan aloqa uzildi",
     "retry": "Qayta urinish",
-    "cancel": "Bekor qilish"
+    "cancel": "Bekor qilish",
+    "admin": "Admin bilan bog'lanish"
   },
   "admin": {
     "tabs": {

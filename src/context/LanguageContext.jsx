@@ -9,15 +9,15 @@ export const LanguageProvider = ({ children }) => {
   const { currentUser } = useInfoContext();
 
   const getInitialLang = () => {
-    return localStorage.getItem("lang") || currentUser.language || "uz";
+    return localStorage.getItem("lang") || currentUser?.language || "uz";
   };
 
   const [lang, setLang] = useState(getInitialLang);
 
   useEffect(() => {
-    if (currentUser?.language && currentUser.language !== lang) {
-      setLang(currentUser.language);
-      localStorage.setItem("lang", currentUser.language);
+    if (currentUser?.language && currentUser?.language !== lang) {
+      setLang(currentUser?.language);
+      localStorage.setItem("lang", currentUser?.language);
     }
   }, [currentUser?.language]);
 

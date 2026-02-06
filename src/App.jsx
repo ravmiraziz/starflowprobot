@@ -76,12 +76,12 @@ function App() {
     if (!window.Telegram?.WebApp) return;
     const webApp = window.Telegram.WebApp;
 
-    // webApp.ready();
-    // if (webApp.requestFullscreen) {
-    //   webApp.requestFullscreen();
-    // } else {
-    //   webApp.expand();
-    // }
+    webApp.ready();
+    if (webApp.requestFullscreen) {
+      webApp.requestFullscreen();
+    } else {
+      webApp.expand();
+    }
     webApp.disableVerticalSwipes();
 
     // ✅ Viewport meta tag

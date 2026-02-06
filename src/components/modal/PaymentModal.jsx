@@ -62,8 +62,11 @@ const PaymentModal = ({ transactionId, data, onClose, price, cashback }) => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const { data } = await getOne("purchase", transactionId);
-      if (data.message === "success") {
+      const { data: status } = await getOne(
+        "purchase",
+        data?.id || transactionId,
+      );
+      if (status.message === "success") {
         setCurrentScreen("SUCCESS");
         getData();
         setToast({

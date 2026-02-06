@@ -57,7 +57,7 @@ const Success = ({ cashback, amount, onReset }) => {
 
       <motion.div
         variants={itemVariants}
-        className="w-full flex justify-end relative z-10 mt-11"
+        className="w-full flex justify-end relative z-10 mt-20"
         style={{ willChange: "transform, opacity" }}
       >
         <button

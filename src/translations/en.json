@@ -87,7 +87,8 @@
     "description": "An error occurred, please try again",
     "networkError": "Internet connection lost",
     "retry": "Retry",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "admin": "Contact admin"
   },
   "admin": {
     "tabs": {

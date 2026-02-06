@@ -3,9 +3,10 @@ import { MdClose, MdStar } from "react-icons/md";
 import { useLanguage } from "../../context/LanguageContext";
 import { motion } from "framer-motion";
 import { useInfoContext } from "../../context/infoContext";
+import { BiSupport } from "react-icons/bi";
 
 const Error = ({ onCancel }) => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const { setCurrentScreen } = useInfoContext();
 
   const containerVariants = {
@@ -86,15 +87,19 @@ const Error = ({ onCancel }) => {
 
         <motion.div
           variants={itemVariants}
-          className="bg-white/5 border border-red-500/20 backdrop-blur-xl flex items-center gap-4 rounded-2xl p-5 min-w-[280px]"
+          className="bg-white/5 border border-red-500/20 backdrop-blur-xl flex items-center mb-4 gap-4 rounded-2xl p-5 min-w-[280px]"
           style={{ willChange: "transform, opacity" }}
         >
-          <div className="size-10 rounded-full bg-red-500/10 flex items-center justify-center text-red-500">
-            <RiSignalWifiErrorFill className="text-xl" />
-          </div>
-          <p className="text-sm font-medium text-white/80 text-left">
-            {t("error.networkError")}
-          </p>
+          <a
+            href={
+              lang === "ru"
+                ? "https://t.me/+998934905134"
+                : "https://t.me/+998996860307"
+            }
+            className="h-full w-full flex items-center justify-center text-blue-500"
+          >
+            {t("error.admin")}
+          </a>
         </motion.div>
       </div>
 
